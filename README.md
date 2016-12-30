@@ -1,10 +1,73 @@
+# General
+JavaScript (node.js/browser) library for inheritance and mixins in JavaScript with strong coupling of contexts. Includes private/public/static members/functions as well as mixin architecture (borrowing functionality from mixins);
+
 # Installation
+## in Node.js
 ```
 npm install 34rth-javascript-core-oo
+```
+## in Browser
+Download the /bin/oo.js(https://raw.githubusercontent.com/34rth/34rth-javascript-core-oo/master/bin/oo.js) file from github
 
+```html
+<script type="text/javascript" src="oo.js"></script>
 ```
 # Examples 
-## Simple inheritance
+## Classes
+The example below shows the private, public functions/members, static functions and variables as well as the constructor.
+```javascript
+var earth = require('34rth-javascript-core-oo');
+
+var my_class = earth.core.object.extend(new function(){
+  this.__id__ = 'my_class'; //this is optional for debugging purpose; definition does not have to be included
+  
+  this.statics = {};//define the statics object:
+  this.statics.my_static_function = function(){
+    console.log('Hooray, I\'m static');
+  };
+
+  this.statics.my_other_static_function = function(){
+    console.log('So what, so am I...');
+  };
+
+  this.statics.STATIC_VALUE = 'I am like a rock...';
+
+  this.member_variable = 'I am a variable and can be accessed from any instance';
+
+  var private_variable = 'I am shy';
+
+  //I am the constructor, all your base are belong to us
+  this.__init = function(a, b, c){
+    console.log('Constructing is as easy as ' + a + ' ' + b + ' ' + c);
+  };
+
+  this.public_function = function(){
+    console.log('total extrovert');
+  };
+
+  var private_function = function(){
+    console.log('not really introvert, but do not really fancy being seen everywhere, anytime...');
+  };
+});
+
+//testing the statics
+my_class.my_static_function();
+my_class.my_other_static_function();
+console.log(my_class.STATIC_VALUE);
+
+var my_instance = new my_class(1,2,3);
+my_instance.public_function();
+try{
+  my_instance.private_function();
+}catch(e){
+  console.log('really, really, really don\'t want to be called');
+}
+console.log(my_instance.member_variable);
+console.log(my_instance.private_variable);//undefined... they said they're shy :) 
+
+```
+
+## Simple class inheritance
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -100,9 +163,161 @@ console.log(typeof bicycle_instance);//returns object
 console.log(mountain_bike_instance instanceof earth.core.object);//prints true
 console.log(mountain_bike_instance instanceof bicycle);//prints true
 console.log(mountain_bike_instance instanceof mountain_bike);//prints false
-
 ```
 
+## Static functions
+```javascript
+var earth = require('34rth-javascript-core-oo');
+
+var my_static_class = earth.core.object.extend(new function(){
+  this.statics = [];
+
+  this.statics.say_hello = function(name){
+    console.log('Hello ' + name);
+  };
+});
+
+my_static_class.say_hello('Peter');//prints "Hello Peter"
+
+//static functions can also be called from instances (without knowing the base class) via accessing the constructor
+var instance = new my_static_class();
+instance.constructor.say_hello('Marry');//prints "Hello Marry"
+```
+
+## Static functions and inheritance
+```javascript
+var earth = require('34rth-javascript-core-oo');
+
+var my_parent_static_class = earth.core.object.extend(new function(){
+  this.statics = [];
+
+  this.statics.say_hello = function(name){
+    console.log('Hello ' + name);
+  };
+});
+
+var my_child_static_class = my_parent_static_class.extend(new function(){
+  this.statics = [];
+
+  this.statics.say_bye = function(name){
+    console.log('Bye ' + name);
+  };
+});
+
+my_child_static_class.say_hello('Marry');//prints "Hello Marry"
+my_child_static_class.say_bye('Peter');//prints "Bye Peter"
+my_parent_static_class.say_hello('Peter');//print "Hello Peter"
+try{
+  my_parent_static_class.say_bye('Marry');//is not defined and throws an Exception
+}catch(e){
+  console.log('I am not defined');
+}
+```
+
+## Mixins
+Mixins can be used to implement functionality that can be shared between classes. As a class can only inherit from one other class (JAVA-style) mixins allow a way to reduce duplication of code (e.g. caching module or observable pattern implementation). 
+```javascript
+var earth = require('34rth-javascript-core-oo');
+
+var speaker = earth.core.mixin.extend(new function(){
+  this.say_something = function(){
+    console.log('something');
+  };
+});
+
+//mixins can also inherit from other mixins
+var hello = earth.core.mixin.extend(new function(){
+  this.say_hello = function(name){
+    console.log('Hello ' + name);
+  };
+});
+
+var bye = earth.core.mixin.extend(new function(){
+  this.say_goodbye = function(name){
+    console.log('Bye ' + name);
+  };
+});
+
+var app = earth.core.object.extend(new function(){
+  this.includes = [speaker, hello, bye];//array of mixins to include
+});
+
+
+var test = new app();
+
+test.say_something();//Prints "Something"
+test.say_hello('Marry');//prints "Hello Marry"
+test.say_goodbye('Marry');//prints "Bye Marry"
+```
+
+## Mixins and Inheritance
+```javascript
+var earth = require('34rth-javascript-core-oo');
+
+var speaker = earth.core.mixin.extend(new function(){
+  this.say_something = function(){
+    console.log('something');
+  };
+});
+
+//mixins can also inherit from other mixins
+var speaker_with_good_memory = speaker.extend(new function(){
+  this.names = [];
+
+  this.say_hello = function(name){
+    this.names.push(name);
+    console.log('Hello ' + this.names.join(', '));
+  };
+});
+
+var app = earth.core.object.extend(new function(){
+  this.includes = [speaker, speaker_with_good_memory];//array of mixins to include
+});
+
+
+var test = new app();
+
+test.say_something();//Prints "Something"
+test.say_hello('Peter');//prints "Hello Peter"
+test.say_hello('Marry');//prints "Hello Peter, Marry"
+test.say_hello('Charly');//prints "Hello Peter, Marry, Charly"
+```
+
+## Mixin and chaining
+```javascript
+var earth = require('34rth-javascript-core-oo');
+
+var speaker = earth.core.mixin.extend(new function(){
+  this.say_something = function(){
+    console.log('something');
+    return this;//returns a reference to the object mixing
+  };
+});
+
+//mixins can also inherit from other mixins
+var speaker_with_good_memory = speaker.extend(new function(){
+  this.names = [];
+
+  this.say_hello = function(name){
+    this.names.push(name);
+    console.log('Hello ' + this.names.join(', '));
+    return this;//returns a reference to the object mixing
+  };
+});
+
+var app = earth.core.object.extend(new function(){
+  this.includes = [speaker, speaker_with_good_memory];//array of mixins to include
+});
+
+
+var test = new app();
+
+test.say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
+
+//OR
+
+(new app()).say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
+```
 
 # RUN TESTS
 ```bash
