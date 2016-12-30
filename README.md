@@ -1,2 +1,8 @@
-# javascript-inheritance
-javascript inheritance, mixins, etc
+# Class definitions
+
+
+
+# RUN TESTS
+```
+node make.js && ./node_modules/mocha/bin/mocha
+```
