@@ -1,0 +1,23 @@
+{
+  "name": "34rth-core",
+  "version": "1.0.5",
+  "description": "An node/browser library to support full inheritance, mixins, private, public and static variables, event driven programming (publishing/subscribing to instance events) and a global caching mechanism.",
+  "main": "./bin/oo.js",
+  "bin": {
+    "34rth-core": "oo.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "inheritance",
+    "mixin",
+    "event",
+    "driven",
+    "object",
+    "orientation",
+    "cache"
+  ],
+  "author": "Karlheinz Toni <karlheinz.toni@34rth.com> (http://34rth.com)",
+  "license": "MIT"
+}
