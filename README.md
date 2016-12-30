@@ -215,7 +215,7 @@ try{
 ```
 
 ## Mixins
-Mixins can be used to implement functionality that can be shared between classes. As a class can only inherit from one other class (JAVA-style) mixins allow a way to reduce duplication of code (e.g. caching module or observable pattern implementation). 
+Mixins can be used to implement functionality that can be shared between classes. As a class can only inherit from one other class (JAVA-style) mixins allow a way to reduce duplication of code (think aspect oriented programming in JAVA).
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
