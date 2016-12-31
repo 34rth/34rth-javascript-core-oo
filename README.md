@@ -323,7 +323,7 @@ test.say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 ```
 # PERFORMANCE/SPEED
 Performance of 34rth-core-oo framework to native Javascript Object creation. 34rth inheritance depth of 3 has been tested for performance. See [performance.js](https://raw.githubusercontent.com/34rth/34rth-javascript-core-oo/master/performance.js) for details. 
-``
+```
 ===================== native javascript object instantiation ======================
 creating 10,000,000 objects by literals
 literal-object: **543.377ms**
