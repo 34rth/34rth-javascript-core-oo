@@ -1,8 +1,6 @@
 "use strict";
 if(!require) var require = function(path, module){return module};
 
-var clone = require('clone');
-
 /*
  * earth.core.object powers the OOP facilities of the library.
  * Thanks to John Resig and Dean Edwards for inspiration!
@@ -14,6 +12,7 @@ var earth = {
     }
 };
 
+earth.core.object.prototype.__id__ = 'earth.core.object';
 
 /**
   * When extending:
@@ -70,28 +69,19 @@ var earth = {
   *     a.options.myOption2; // 'bar'
   *     a.options.myOption3; // 5
   */
-earth.core.object.extend = function (properties) {
+earth.core.object.extend = function (properties, complex_member_variables) {
   var class_parent = this;
   var class_child = function(){
-    //deep copy of complex values on instantiation for the child class
-    for (var i in this) {
-      if(typeof this[i] === 'object' && this[i] !== null){
-        switch(i){
-          case '__id__':
-          case 'statics':
-          case 'includes':
-          case '__init_hooks':
-            break;
-          default:
-            this[i] = clone(this[i]);
-        }
+    if(this.__complex_member_variables__){
+      var l = this.__complex_member_variables__.length;
+      for(var i = 0; i<l; i++){
+      	this[this.__complex_member_variables__[i]] =  earth.core.utils.clone(this[this.__complex_member_variables__[i]], true);
       }
     }
-
+  
     if(this.__init) this.__init.apply(this, arguments);
     this.call_init_hooks(); 
   };
-
 
   class_child.prototype = earth.core.utils.create(class_parent.prototype);
   class_child.prototype.constructor = class_child;
@@ -145,11 +135,32 @@ earth.core.object.extend = function (properties) {
   
   // mix given properties into the prototype
   earth.core.utils.extend(class_child.prototype, properties); 
+  //checking for complex values in prototype
+  var complex_members = [];
+  for(var i in class_child.prototype){
+    if(typeof class_child.prototype[i] === 'object' && class_child.prototype[i] !== null){
+      switch(i){
+        case '__init_hooks':
+        case '__complex_member_variables__':
+          break;
+        default:
+          complex_members.push(i);
+          break;
+      }
+    } 
+  };
+
+  if(complex_members.length > 0){
+    console.info(class_child.prototype.__id__ + ': implements complex objects as a member variables (' + complex_members.join(', ') + ').');
+    if(complex_member_variables!==true){//i.e. if implementer is potentially not aware of consequences, warn with consequences
+      console.warn(class_child.prototype.__id__ + ': Complex member cloning will be enforced. If you would like to avoid this behaviour, please initiate the member variable in the constructor (__init) or set complex_member_variable to false. The consequence of setting complex_members_variables to false is that complex members will be shared across all instances and modifying a complex member variable will result in the change being visible in all other instances.');
+    }
+    //setting the complex member variable if complex member variables have not been explicitly set to false
+    class_child.prototype.__complex_member_variables__ = (true && (complex_member_variables!== false))?complex_members:false;
+  }
 
   return class_child;
 };
-
-earth.core.object.prototype.__id__ = 'earth.core.object';
 
 // method for adding properties to prototype
 earth.core.object.include = function(props){
@@ -281,6 +292,7 @@ earth.core.utils = new (function(){
     */
   this.extend = function (dest) {
     var i, j, len, src;
+    var complex = false;
     for (j = 1, len = arguments.length; j < len; j++) {
       src = arguments[j];
       for (i in src) {
@@ -417,15 +429,52 @@ earth.core.utils = new (function(){
     return result;
   };
 
-  this.clone = function(obj){
-    var target = {};
-    for (var i in obj) {
-      if (obj.hasOwnProperty(i)) {
-        target[i] = obj[i];
+  this.clone = function(obj, deep){
+		if(deep){
+ 	    var i, ret, ret2;
+  	  if (typeof obj === "object") {
+  	    if (obj === null) return obj;
+  	    if (Object.prototype.toString.call(obj) === "[object Array]") {
+  	      ret = [];
+  	      for (i = 0; i < obj.length; i++) {
+  	        if (typeof obj[i] === "object") {
+  	          ret2 = this.clone(obj[i], true);
+  	        } else {
+  	          ret2 = obj[i];
+  	        }
+  	        ret.push(ret2);
+  	      }
+  	    } else {
+  	      ret = {};
+  	      for (i in obj) {
+  	        if (obj.hasOwnProperty(i)) {
+  	          if (typeof(obj[i] === "object")) {
+  	            ret2 = this.clone(obj[i], true);
+  	          } else {
+  	            ret2 = obj[i];
+  	          }
+  	          ret[i] = ret2;
+  	        }
+  	      }
+  	    }
+  	  } else {
+  	    ret = obj;
+    	}
+  
+    	return ret;
+    }else{
+      var target = {};
+      for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+          target[i] = obj[i];
+        }
       }
+      return target;
     }
-    return target;
   };
+
+  this.clone_deep = function(obj) {
+	};
 })();
 
 earth.extend = earth.core.utils.extend;

@@ -12,7 +12,10 @@ var class_parent = earth.core.object.extend(new function(){
   
   this.complex_object = {
     first:'parent_first',
-    second:'parent_second'
+    second:'parent_second',
+    my_complex_object_function:function(){
+      return 10;
+    }
   };
   
   this.__init = function(parent_number){

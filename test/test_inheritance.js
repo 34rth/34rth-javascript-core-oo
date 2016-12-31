@@ -17,6 +17,11 @@ describe('Inheritance', function(){
 
       assert.notEqual(c.complex_object.first, p.complex_object.first);
     }
+ });
+ 
+  it('Make sure complex object function is copied correctly.', function(){
+    var c = new class_parent(20);
+    assert.equal(10, c.complex_object.my_complex_object_function());
   });
 
  it('Should call the parent method from the child instance, returning the parent instance variable', function(){
@@ -24,7 +29,7 @@ describe('Inheritance', function(){
       var c = new class_child(i, i+1);
       assert.equal(i, c.get_parent_number());
     }
-  });
+ });
 
   it('Should call the child method from the child instance', function(){
     for(var i = 0;i<10;i++){

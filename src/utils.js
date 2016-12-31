@@ -45,6 +45,7 @@ earth.core.utils = new (function(){
     */
   this.extend = function (dest) {
     var i, j, len, src;
+    var complex = false;
     for (j = 1, len = arguments.length; j < len; j++) {
       src = arguments[j];
       for (i in src) {
@@ -181,15 +182,52 @@ earth.core.utils = new (function(){
     return result;
   };
 
-  this.clone = function(obj){
-    var target = {};
-    for (var i in obj) {
-      if (obj.hasOwnProperty(i)) {
-        target[i] = obj[i];
+  this.clone = function(obj, deep){
+		if(deep){
+ 	    var i, ret, ret2;
+  	  if (typeof obj === "object") {
+  	    if (obj === null) return obj;
+  	    if (Object.prototype.toString.call(obj) === "[object Array]") {
+  	      ret = [];
+  	      for (i = 0; i < obj.length; i++) {
+  	        if (typeof obj[i] === "object") {
+  	          ret2 = this.clone(obj[i], true);
+  	        } else {
+  	          ret2 = obj[i];
+  	        }
+  	        ret.push(ret2);
+  	      }
+  	    } else {
+  	      ret = {};
+  	      for (i in obj) {
+  	        if (obj.hasOwnProperty(i)) {
+  	          if (typeof(obj[i] === "object")) {
+  	            ret2 = this.clone(obj[i], true);
+  	          } else {
+  	            ret2 = obj[i];
+  	          }
+  	          ret[i] = ret2;
+  	        }
+  	      }
+  	    }
+  	  } else {
+  	    ret = obj;
+    	}
+  
+    	return ret;
+    }else{
+      var target = {};
+      for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+          target[i] = obj[i];
+        }
       }
+      return target;
     }
-    return target;
   };
+
+  this.clone_deep = function(obj) {
+	};
 })();
 
 earth.extend = earth.core.utils.extend;
