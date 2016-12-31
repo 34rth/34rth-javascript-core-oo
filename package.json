@@ -1,6 +1,6 @@
 {
   "name": "34rth-javascript-core-oo",
-  "version": "1.3.16",
+  "version": "1.4.0",
   "description": "An node/browser library to support full inheritance, mixins, private, public and static variables, event driven programming (publishing/subscribing to instance events) and a global caching mechanism.",
   "main": "./bin/oo.js",
   "repository": {
@@ -20,11 +20,5 @@
     "cache"
   ],
   "author": "Karlheinz Toni <karlheinz.toni@34rth.com> (http://34rth.com)",
-  "license": "MIT",
-  "dependencies": {
-    "clone": "^2.1.0"
-  },
-  "devDependencies": {
-    "clone": "^2.1.0"
-  }
+  "license": "MIT"
 }
