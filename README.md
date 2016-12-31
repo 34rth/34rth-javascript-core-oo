@@ -321,8 +321,35 @@ test.say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 
 (new app()).say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 ```
+# PERFORMANCE/SPEED
+Performance of 34rth-core-oo framework to native Javascript Object creation. 34rth inheritance depth of 3 has been tested for performance. See [performance.js](https://raw.githubusercontent.com/34rth/34rth-javascript-core-oo/master/performance.js) for details. 
+``
+===================== native javascript object instantiation ======================
+creating 10,000,000 objects by literals
+literal-object: **543.377ms**
+creating 10,000,000 "Object.create()"
+object: **881.320ms**
+creating 10,000,000 arrays by literals
+literal-array: **72.359ms**
+creating 10,000,000 "new Array()"
+array: **145.507ms**
+creating 10,000,000 function class instances
+literal: **1537.537ms**
+===================== 34rth framework non complex object inheritance levels ======================
+34rth framework creating 10,000,000 new class instances
+earth-complex-depth-0: **112.470ms**
+34rth framework creating 10,000,000 new subclass instances
+earth-complex-depth-1: **319.050ms**
+34rth framework creating 10,000,000 new subsubclass instances
+earth-complex-depth-2: **945.159ms**
+34rth framework creating 10,000,000 new subsubsubclass instances
+earth-complex-depth-3: **1232.001ms`**
+```
 
-# RUN TESTS
+# RUN TESTS AND TEST RESULTS
+For mocha test results see [Travis CI](https://travis-ci.org/34rth/34rth-javascript-core-oo).
+
 ```bash
 node make.js && ./node_modules/mocha/bin/mocha
 ```
+
