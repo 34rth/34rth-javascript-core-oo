@@ -357,6 +357,8 @@ Performance comparison against the following libraries/scripts:
 * [John Resig's extend function](https://www.npmjs.com/package/class.extend)
 * Native JavaScript inheritance 
 
+Values in miliseconds are mapped against the library and the number of operations performed.
+
 ### OBJECT INSTANTIATION
 | Library | 100,000 | 1,000,000 | 10,000,000 | 
 | --- | --- | --- | --- | 
