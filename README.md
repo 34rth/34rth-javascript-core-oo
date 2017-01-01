@@ -359,7 +359,7 @@ Performance comparison against the following libraries/scripts:
 
 ### OBJECT INSTANTIATION
 | Library | 100,000 | 1,000,000 | 10,000,000 | 
- | --- | --- | --- | --- | 
+| --- | --- | --- | --- | 
 | TypeScriptChild | 14 | 102 | 1,024 | 
 | CMBrowserMonoChild | 12 | 112 | 1,109 | 
 | CMBrowserPolyChild | 11 | 103 | 1,028 | 
@@ -373,7 +373,7 @@ Performance comparison against the following libraries/scripts:
 
 ### METHOD INVOCATION
 | Library | 100,000 | 1,000,000 | 10,000,000 | 
- | --- | --- | --- | --- | 
+| --- | --- | --- | --- | 
 | TypeScriptChild | 4 | 29 | 293 | 
 | CMBrowserMonoChild | 4 | 26 | 252 | 
 | CMBrowserPolyChild | 5 | 30 | 292 | 
@@ -387,7 +387,7 @@ Performance comparison against the following libraries/scripts:
 
 ### COMBINED STATISTICS
 | Library | 100,000 | 1,000,000 | 10,000,000 | 
- | --- | --- | --- | --- | 
+| --- | --- | --- | --- | 
 | TypeScriptChild | 9 | 66 | 658 | 
 | CMBrowserMonoChild | 8 | 69 | 681 | 
 | CMBrowserPolyChild | 8 | 66 | 660 | 
