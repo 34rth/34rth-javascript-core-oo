@@ -3663,15 +3663,15 @@ for(var c in classes){
   combined += '\n';
 }
 
-console.log('### Object INSTANTIATION'); 
+console.log('### OBJECT INSTANTIATION'); 
 console.log(iterations_string);
 console.log(separator_string);
 console.log(instantiation);
-console.log('\n\n### METHOD Invocation');
+console.log('### METHOD INVOCATION');
 console.log(iterations_string);
 console.log(separator_string);
 console.log(method);
-console.log('\n\n### COMBINED Statistics');
+console.log('### COMBINED STATISTICS');
 console.log(iterations_string);
 console.log(separator_string);
 console.log(combined);

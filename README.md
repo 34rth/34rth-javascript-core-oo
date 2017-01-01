@@ -356,46 +356,50 @@ Performance comparison against the following libraries/scripts:
 * [Fiber](https://www.npmjs.com/package/fiber)
 * [John Resig's extend function](https://www.npmjs.com/package/class.extend)
 * Native JavaScript inheritance 
-| Library | 100,000 | 1,000,000 | 10,000,000 | 
-| --- | --- | --- | --- | 
-| TypeScriptChild | 14 | 101 | 1,001 | 
-| CMBrowserMonoChild | 12 | 112 | 1,105 | 
-| CMBrowserPolyChild | 11 | 102 | 1,022 | 
-| CMServerFullrefMonoChild | 12 | 112 | 1,111 | 
-| CMServerPartialrefMonoChild | 12 | 113 | 1,131 | 
-| FiberChild | 16 | 146 | 1,476 | 
-| JRChild | 18 | 164 | 1,659 | 
-| NativeChild | 11 | 107 | 1,072 | 
-| inherit | 14 | 126 | 1,261 | 
-| subclass_34rth | 15 | 129 | 1,302 | 
 
-### METHOD Invocation
+### OBJECT INSTANTIATION
 | Library | 100,000 | 1,000,000 | 10,000,000 | 
-| --- | --- | --- | --- | 
-| TypeScriptChild | 5 | 32 | 324 | 
-| CMBrowserMonoChild | 4 | 25 | 249 | 
-| CMBrowserPolyChild | 5 | 30 | 287 | 
-| CMServerFullrefMonoChild | 4 | 24 | 239 | 
-| CMServerPartialrefMonoChild | 4 | 24 | 239 | 
-| FiberChild | 4 | 28 | 271 | 
-| JRChild | 7 | 50 | 505 | 
-| NativeChild | 4 | 30 | 309 | 
-| inherit | 5 | 33 | 329 | 
-| subclass_34rth | 5 | 32 | 329 | 
+ | --- | --- | --- | --- | 
+| TypeScriptChild | 14 | 102 | 1,024 | 
+| CMBrowserMonoChild | 12 | 112 | 1,109 | 
+| CMBrowserPolyChild | 11 | 103 | 1,028 | 
+| CMServerFullrefMonoChild | 13 | 111 | 1,110 | 
+| CMServerPartialrefMonoChild | 12 | 112 | 1,117 | 
+| FiberChild | 16 | 146 | 1,467 | 
+| JRChild | 18 | 165 | 1,663 | 
+| NativeChild | 12 | 107 | 1,075 | 
+| inherit | 14 | 127 | 1,281 | 
+| subclass_34rth | 15 | 129 | 1,299 | 
 
-### COMBINED Statistics
+### METHOD INVOCATION
 | Library | 100,000 | 1,000,000 | 10,000,000 | 
-| --- | --- | --- | --- | 
-| TypeScriptChild | 9 | 67 | 662 | 
-| CMBrowserMonoChild | 8 | 69 | 677 | 
-| CMBrowserPolyChild | 8 | 66 | 654 | 
-| CMServerFullrefMonoChild | 8 | 68 | 675 | 
-| CMServerPartialrefMonoChild | 8 | 68 | 685 | 
-| FiberChild | 10 | 87 | 873 | 
-| JRChild | 13 | 107 | 1,082 | 
-| NativeChild | 8 | 68 | 690 | 
-| inherit | 9 | 79 | 795 | 
-| subclass_34rth | 10 | 80 | 815 | 
+ | --- | --- | --- | --- | 
+| TypeScriptChild | 4 | 29 | 293 | 
+| CMBrowserMonoChild | 4 | 26 | 252 | 
+| CMBrowserPolyChild | 5 | 30 | 292 | 
+| CMServerFullrefMonoChild | 4 | 24 | 233 | 
+| CMServerPartialrefMonoChild | 4 | 23 | 235 | 
+| FiberChild | 5 | 28 | 281 | 
+| JRChild | 7 | 52 | 525 | 
+| NativeChild | 3 | 24 | 252 | 
+| inherit | 5 | 33 | 337 | 
+| subclass_34rth | 5 | 32 | 323 | 
+
+### COMBINED STATISTICS
+| Library | 100,000 | 1,000,000 | 10,000,000 | 
+ | --- | --- | --- | --- | 
+| TypeScriptChild | 9 | 66 | 658 | 
+| CMBrowserMonoChild | 8 | 69 | 681 | 
+| CMBrowserPolyChild | 8 | 66 | 660 | 
+| CMServerFullrefMonoChild | 8 | 68 | 671 | 
+| CMServerPartialrefMonoChild | 8 | 68 | 676 | 
+| FiberChild | 10 | 87 | 874 | 
+| JRChild | 13 | 109 | 1,094 | 
+| NativeChild | 7 | 66 | 663 | 
+| inherit | 9 | 80 | 809 | 
+| subclass_34rth | 10 | 81 | 811 | 
+
+(Lower values are better).
 
 # RUN TESTS AND TEST RESULTS
 For mocha test results see [Travis CI](https://travis-ci.org/34rth/34rth-javascript-core-oo).
