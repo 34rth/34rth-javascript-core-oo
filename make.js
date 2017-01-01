@@ -55,7 +55,7 @@ var output_file = './bin/oo.js';
   });
 })).then(function(file){
   //if all goes right, we append the export
-  fs.appendFileSync(file, 'module.exports = earth;');
+  fs.appendFileSync(file,"if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {module.exports = earth;}else {if (typeof define === 'function' && define.amd) {define([], function() {return earth;});}else {window.earth = earth;}}");
   return file;
 }, function(reason){
   console.log(reason.message);

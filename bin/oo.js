@@ -1077,4 +1077,4 @@ earth.core.cache = earth.core.object.extend(new function(){
 earth.core.cache.add_init_hook(function(){
   this.constructor.add(this.id, this);
 });
-module.exports = earth;
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {module.exports = earth;}else {if (typeof define === 'function' && define.amd) {define([], function() {return earth;});}else {window.earth = earth;}}
