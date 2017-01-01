@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/34rth/34rth-javascript-core-oo.svg?branch=master)](https://travis-ci.org/34rth/34rth-javascript-core-oo)
 [![npm](http://img.shields.io/npm/v/34rth-javascript-core-oo.svg?style=flat-square)](https://www.npmjs.org/package/34rth-javascript-core-oo)
+[![npm](https://img.shields.io/npm/l/34rth-javascript-core-oo.svg)]()
 
 # General
 JavaScript (node.js/browser) library for inheritance and mixins in JavaScript with strong coupling of contexts. Includes private/public/static members/functions as well as mixin architecture (borrowing functionality from mixins);

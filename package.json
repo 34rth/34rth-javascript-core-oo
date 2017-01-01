@@ -1,6 +1,6 @@
 {
   "name": "34rth-javascript-core-oo",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "An node/browser library to support full inheritance, mixins, private, public and static variables, event driven programming (publishing/subscribing to instance events) and a global caching mechanism.",
   "main": "./bin/oo.js",
   "repository": {
