@@ -22,7 +22,7 @@ The example below shows the private, public functions/members, static functions 
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
-var my_class = earth.core.object.extend(new function(){
+var my_class = earth.core.object.extend(function(_super){
   this.__id__ = 'my_class'; //this is optional for debugging purpose; definition does not have to be included
   
   this.statics = {};//define the statics object:
@@ -71,7 +71,8 @@ console.log(my_instance.private_variable);//undefined... they said they're shy :
 
 ```
 
-## Simple class inheritance
+## Simple class inheritance and _super
+Code example for simple inheritance calling _super constructor and methods.
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -113,7 +114,7 @@ var bicycle = earth.core.object.extend(new function(){
 });
 
 //definition of mountain_bike class, inheriting from the bicycle class
-var mountain_bike = bicycle.extend(new function(){
+var mountain_bike = bicycle.extend(function(_super){
   this.__id__ = 'bicycle.mountain_bike';//this is optional for debugging purposes and can be any random string
 
   //the mountain_bike class adds one more public member variable
@@ -121,7 +122,7 @@ var mountain_bike = bicycle.extend(new function(){
 
   //constructor function
   this.__init = function(start_height, start_cadence, start_speed, start_gear){
-    bicycle.prototype.__init.call(this, start_cadence, start_speed, start_gear);//call super prototype
+    _super.__init.call(this, start_cadence, start_speed, start_gear);//call super prototype
     this.seat_height = start_height;
   };
 
@@ -138,7 +139,7 @@ var mountain_bike = bicycle.extend(new function(){
   //we're shadowing the function get_speed of bicycle
   this.get_speed = function(){
     //but we're calling the function of the parent 
-    bicycle.prototype.get_speed.call(this);
+    _super.get_speed.call(this);
   };
 });
 
@@ -322,7 +323,8 @@ test.say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 
 (new app()).say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 ```
-# PERFORMANCE/SPEED
+# PERFORMANCE Tests
+## Native Tests
 Performance of 34rth-core-oo framework to native Javascript Object creation. 34rth inheritance depth of 3 has been tested for performance. See [performance.js](https://raw.githubusercontent.com/34rth/34rth-javascript-core-oo/master/performance.js) for details. 
 ```
 ===================== native javascript object instantiation ======================
@@ -346,6 +348,54 @@ earth-complex-depth-2: **945.159ms**
 34rth framework creating 10,000,000 new subsubsubclass instances
 earth-complex-depth-3: **1232.001ms`**
 ```
+## Performance Comparison
+Performance comparison against the following libraries/scripts:
+* [inherit](https://www.npmjs.com/package/inherit)
+* [Lava Class Manager](https://www.npmjs.com/package/lava-class-manager)
+* [TypeScript](https://www.npmjs.com/package/typescript)
+* [Fiber](https://www.npmjs.com/package/fiber)
+* [John Resig's extend function](https://www.npmjs.com/package/class.extend)
+* Native JavaScript inheritance 
+| Library | 100,000 | 1,000,000 | 10,000,000 | 
+| --- | --- | --- | --- | 
+| TypeScriptChild | 14 | 101 | 1,001 | 
+| CMBrowserMonoChild | 12 | 112 | 1,105 | 
+| CMBrowserPolyChild | 11 | 102 | 1,022 | 
+| CMServerFullrefMonoChild | 12 | 112 | 1,111 | 
+| CMServerPartialrefMonoChild | 12 | 113 | 1,131 | 
+| FiberChild | 16 | 146 | 1,476 | 
+| JRChild | 18 | 164 | 1,659 | 
+| NativeChild | 11 | 107 | 1,072 | 
+| inherit | 14 | 126 | 1,261 | 
+| subclass_34rth | 15 | 129 | 1,302 | 
+
+### METHOD Invocation
+| Library | 100,000 | 1,000,000 | 10,000,000 | 
+| --- | --- | --- | --- | 
+| TypeScriptChild | 5 | 32 | 324 | 
+| CMBrowserMonoChild | 4 | 25 | 249 | 
+| CMBrowserPolyChild | 5 | 30 | 287 | 
+| CMServerFullrefMonoChild | 4 | 24 | 239 | 
+| CMServerPartialrefMonoChild | 4 | 24 | 239 | 
+| FiberChild | 4 | 28 | 271 | 
+| JRChild | 7 | 50 | 505 | 
+| NativeChild | 4 | 30 | 309 | 
+| inherit | 5 | 33 | 329 | 
+| subclass_34rth | 5 | 32 | 329 | 
+
+### COMBINED Statistics
+| Library | 100,000 | 1,000,000 | 10,000,000 | 
+| --- | --- | --- | --- | 
+| TypeScriptChild | 9 | 67 | 662 | 
+| CMBrowserMonoChild | 8 | 69 | 677 | 
+| CMBrowserPolyChild | 8 | 66 | 654 | 
+| CMServerFullrefMonoChild | 8 | 68 | 675 | 
+| CMServerPartialrefMonoChild | 8 | 68 | 685 | 
+| FiberChild | 10 | 87 | 873 | 
+| JRChild | 13 | 107 | 1,082 | 
+| NativeChild | 8 | 68 | 690 | 
+| inherit | 9 | 79 | 795 | 
+| subclass_34rth | 10 | 80 | 815 | 
 
 # RUN TESTS AND TEST RESULTS
 For mocha test results see [Travis CI](https://travis-ci.org/34rth/34rth-javascript-core-oo).

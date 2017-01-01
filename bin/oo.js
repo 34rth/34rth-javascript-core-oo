@@ -70,6 +70,7 @@ earth.core.object.prototype.__id__ = 'earth.core.object';
   *     a.options.myOption3; // 5
   */
 earth.core.object.extend = function (properties, complex_member_variables) {
+  if(properties instanceof Function) properties = new properties(this.prototype);
   var class_parent = this;
   var class_child = function(){
     if(this.__complex_member_variables__){
@@ -80,7 +81,7 @@ earth.core.object.extend = function (properties, complex_member_variables) {
     }
   
     if(this.__init) this.__init.apply(this, arguments);
-    this.call_init_hooks(); 
+    if(this.__init_hooks.length>0) this.call_init_hooks(); 
   };
 
   class_child.prototype = earth.core.utils.create(class_parent.prototype);

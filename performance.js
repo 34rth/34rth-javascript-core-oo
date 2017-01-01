@@ -152,9 +152,43 @@ Number.prototype.format = function(n, x) {
       var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
       return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
+
+var timer = earth.core.object.extend(new function(){
+  this.timers = null;
+  this.last_time = null;
+
+  this.__init = function(){
+    this.timers = [];
+  };
+
+  this.start = function(){
+    this.timers.push(new Date());
+  };
+
+  this.stop = function(){
+    var start = this.timers.pop();
+    this.last_time = (new Date()) - start;
+    return this.last_time;
+  };
+
+  this.get_last_time = function(){
+    returnt this.last_time;
+  };
+});
+
+timer = new timer();
+
 var instance = null;
 var iterations = 10*1000*1000;
 var iterations_readable = iterations.format();
+
+var timings = [];
+
+timer.start();
+  console.log(timer.stop());
+},1300);
+
+return;
 
 console.log('===================== native javascript object instantiation ======================');
 console.log('creating ' + iterations_readable + ' objects by literals'); 

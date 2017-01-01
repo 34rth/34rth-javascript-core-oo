@@ -1,6 +1,6 @@
 var class_parent = require('./class_parent.js');
 
-var class_child = class_parent.extend(new function(){
+var class_child = class_parent.extend(function(_super){
   this.__id__ = 'earth.test.child';//this is optional, used for caching and debugging
 
   this.statics = {};
@@ -15,7 +15,7 @@ var class_child = class_parent.extend(new function(){
   var private_variable = 'should not be seen from the outside, but can be used from anywhere within the class context';
 
   this.__init = function(parent_number, child_number){
-    class_parent.prototype.__init.call(this, parent_number);// call to parent constructor
+    _super.__init.call(this, parent_number);// call to parent constructor
     this.child_number = child_number;
   };
 
@@ -24,12 +24,12 @@ var class_child = class_parent.extend(new function(){
   };
 
   this.shadowable_function = function(concatenate){
-    var test = ((concatenate)?class_parent.prototype.shadowable_function.call(this):'') + 'child';
+    var test = ((concatenate)?_super.shadowable_function.call(this):'') + 'child';
     return test;
   };
 
   this.set_complex_object_value_child = function(key, val){
-    class_parent.prototype.set_complex_object_value.call(this, key, val);
+    _super.set_complex_object_value.call(this, key, val);
   };
 });
 

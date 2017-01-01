@@ -1,6 +1,6 @@
 var earth = require('../bin/oo.js');
 
-var class_parent = earth.core.object.extend(new function(){
+var class_parent = earth.core.object.extend(function(_super){
   this.__id__ = 'earth.test.parent';//this is optional, used for caching and debugging
 
   this.statics = {};
