@@ -77,7 +77,7 @@ Code example for simple inheritance calling _super constructor and methods.
 var earth = require('34rth-javascript-core-oo');
 
 //definition of bicycle class - extending from the core class
-var bicycle = earth.core.object.extend(new function(){
+var bicycle = earth.core.object.extend(function(_super){
   this.__id__ = 'bicycle';//this is optional for debugging purposes and can be any random string
 
   // the bicycle class has three public member variables
@@ -139,7 +139,7 @@ var mountain_bike = bicycle.extend(function(_super){
   //we're shadowing the function get_speed of bicycle
   this.get_speed = function(){
     //but we're calling the function of the parent 
-    _super.get_speed.call(this);
+    return _super.get_speed.call(this);
   };
 });
 
@@ -167,14 +167,15 @@ console.log(mountain_bike_instance.get_speed() == mountain_bike_instance.speed);
 console.log(typeof bicycle_instance);//returns object
 console.log(mountain_bike_instance instanceof earth.core.object);//prints true
 console.log(mountain_bike_instance instanceof bicycle);//prints true
-console.log(mountain_bike_instance instanceof mountain_bike);//prints false
+console.log(mountain_bike_instance instanceof mountain_bike);//prints true 
+
 ```
 
 ## Static functions
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
-var my_static_class = earth.core.object.extend(new function(){
+var my_static_class = earth.core.object.extend(function(_super){
   this.statics = [];
 
   this.statics.say_hello = function(name){
@@ -193,7 +194,7 @@ instance.constructor.say_hello('Marry');//prints "Hello Marry"
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
-var my_parent_static_class = earth.core.object.extend(new function(){
+var my_parent_static_class = earth.core.object.extend(function(_super){
   this.statics = [];
 
   this.statics.say_hello = function(name){
@@ -201,7 +202,7 @@ var my_parent_static_class = earth.core.object.extend(new function(){
   };
 });
 
-var my_child_static_class = my_parent_static_class.extend(new function(){
+var my_child_static_class = my_parent_static_class.extend(function(_super){
   this.statics = [];
 
   this.statics.say_bye = function(name){
@@ -224,26 +225,26 @@ Mixins can be used to implement functionality that can be shared between classes
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
-var speaker = earth.core.mixin.extend(new function(){
+var speaker = earth.core.mixin.extend(function(_super){
   this.say_something = function(){
     console.log('something');
   };
 });
 
 //mixins can also inherit from other mixins
-var hello = earth.core.mixin.extend(new function(){
+var hello = earth.core.mixin.extend(function(_super){
   this.say_hello = function(name){
     console.log('Hello ' + name);
   };
 });
 
-var bye = earth.core.mixin.extend(new function(){
+var bye = earth.core.mixin.extend(function(_super){
   this.say_goodbye = function(name){
     console.log('Bye ' + name);
   };
 });
 
-var app = earth.core.object.extend(new function(){
+var app = earth.core.object.extend(function(_super){
   this.includes = [speaker, hello, bye];//array of mixins to include
 });
 
@@ -259,15 +260,19 @@ test.say_goodbye('Marry');//prints "Bye Marry"
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
-var speaker = earth.core.mixin.extend(new function(){
+var speaker = earth.core.mixin.extend(function(_super){
   this.say_something = function(){
     console.log('something');
   };
 });
 
 //mixins can also inherit from other mixins
-var speaker_with_good_memory = speaker.extend(new function(){
-  this.names = [];
+var speaker_with_good_memory = speaker.extend(function(_super){
+  this.names = null;
+
+  this.__init = function(){
+    this.names = [];
+  };
 
   this.say_hello = function(name){
     this.names.push(name);
@@ -275,7 +280,7 @@ var speaker_with_good_memory = speaker.extend(new function(){
   };
 });
 
-var app = earth.core.object.extend(new function(){
+var app = earth.core.object.extend(function(_super){
   this.includes = [speaker, speaker_with_good_memory];//array of mixins to include
 });
 
@@ -292,7 +297,7 @@ test.say_hello('Charly');//prints "Hello Peter, Marry, Charly"
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
-var speaker = earth.core.mixin.extend(new function(){
+var speaker = earth.core.mixin.extend(function(_super){
   this.say_something = function(){
     console.log('something');
     return this;//returns a reference to the object mixing
@@ -300,7 +305,7 @@ var speaker = earth.core.mixin.extend(new function(){
 });
 
 //mixins can also inherit from other mixins
-var speaker_with_good_memory = speaker.extend(new function(){
+var speaker_with_good_memory = speaker.extend(function(_super){
   this.names = [];
 
   this.say_hello = function(name){
@@ -310,7 +315,7 @@ var speaker_with_good_memory = speaker.extend(new function(){
   };
 });
 
-var app = earth.core.object.extend(new function(){
+var app = earth.core.object.extend(function(_super){
   this.includes = [speaker, speaker_with_good_memory];//array of mixins to include
 });
 

@@ -1,6 +1,6 @@
 "use strict";
 
-earth.core.mixin.cacheable = earth.core.mixin.extend(new function(){
+earth.core.mixin.cacheable = earth.core.mixin.extend(function(_super){
   this.__id__ = 'earth.core.mixin.cacheable';
   this.statics = {};
   this.statics.add = function(obj){

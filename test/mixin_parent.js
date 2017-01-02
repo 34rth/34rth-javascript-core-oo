@@ -1,6 +1,6 @@
 var earth = require('../bin/oo.js');
 
-var mixin_parent = earth.core.mixin.extend(new function(){
+var mixin_parent = earth.core.mixin.extend(function(_super){
   this.__id__ = 'earth.test.mixin.parent';
 
   this.statics = {};

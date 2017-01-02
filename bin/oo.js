@@ -651,7 +651,10 @@ if (typeof String.prototype.startsWith != 'function') {
 earth.core.mixin = function () {};
 
 earth.core.mixin.extend = function (properties) {
+  console.log(properties);
+  if(properties instanceof Function) properties = new properties(this.prototype);
   var new_object = function () {};
+
 
   // jshint camelcase: false
   var parent_proto = new_object.__super__ = this.prototype;
@@ -689,7 +692,7 @@ earth.core.mixin.add_init_hook = function (fn) { // (Function) || (String, args.
 };
 "use strict";
 
-earth.core.mixin.cacheable = earth.core.mixin.extend(new function(){
+earth.core.mixin.cacheable = earth.core.mixin.extend(function(_super){
   this.__id__ = 'earth.core.mixin.cacheable';
   this.statics = {};
   this.statics.add = function(obj){
@@ -725,7 +728,7 @@ earth.core.mixin.cacheable.add_init_hook(function(){
 });
 "use strict";
 
-earth.core.mixin.observable = earth.core.mixin.extend(new function(){
+earth.core.mixin.observable = earth.core.mixin.extend(function(_super){
   this.__id__ = 'earth.core.mixin.observable';
 
   this.on = function (types, fn, context) {

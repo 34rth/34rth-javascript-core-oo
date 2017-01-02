@@ -1,6 +1,6 @@
 "use strict";
 
-earth.core.mixin.observable = earth.core.mixin.extend(new function(){
+earth.core.mixin.observable = earth.core.mixin.extend(function(_super){
   this.__id__ = 'earth.core.mixin.observable';
 
   this.on = function (types, fn, context) {

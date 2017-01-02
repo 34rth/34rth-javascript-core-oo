@@ -6,7 +6,10 @@
 earth.core.mixin = function () {};
 
 earth.core.mixin.extend = function (properties) {
+  console.log(properties);
+  if(properties instanceof Function) properties = new properties(this.prototype);
   var new_object = function () {};
+
 
   // jshint camelcase: false
   var parent_proto = new_object.__super__ = this.prototype;
