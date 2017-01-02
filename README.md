@@ -365,46 +365,53 @@ Performance comparison against the following libraries/scripts:
 Values in milliseconds are mapped against the library and the number of operations/cycles performed (100k, 1m, 10m). Lower values are better.
 
 ### OBJECT INSTANTIATION
-| Library | 100,000 | 1,000,000 | 10,000,000 | 
-| --- | --- | --- | --- | 
-| TypeScriptChild | 14 | 102 | 1,024 | 
-| CMBrowserMonoChild | 12 | 112 | 1,109 | 
-| CMBrowserPolyChild | 11 | 103 | 1,028 | 
-| CMServerFullrefMonoChild | 13 | 111 | 1,110 | 
-| CMServerPartialrefMonoChild | 12 | 112 | 1,117 | 
-| FiberChild | 16 | 146 | 1,467 | 
-| JRChild | 18 | 165 | 1,663 | 
-| NativeChild | 12 | 107 | 1,075 | 
-| inherit | 14 | 127 | 1,281 | 
-| subclass_34rth | 15 | 129 | 1,299 | 
+| Library | 100,000 | 1,000,000 | 10,000,000 |
+| --- | --- | --- | --- |
+| TypeScriptChild | 14 | 96 | 967 |
+| CMBrowserMonoChild | 12 | 110 | 1,095 |
+| CMBrowserPolyChild | 11 | 100 | 1,007 |
+| CMServerFullrefMonoChild | 12 | 109 | 1,086 |
+| CMServerPartialrefMonoChild | 12 | 112 | 1,134 |
+| FiberChild | 15 | 136 | 1,357 |
+| DNW_FC_Child | 86 | 862 | 8,646 |
+| DNW_IW_Child | 88 | 849 | 8,560 |
+| JRChild | 20 | 175 | 1,766 |
+| NativeChild | 11 | 100 | 1,002 |
+| inherit | 16 | 143 | 1,439 |
+| _34rth | 12 | 102 | 1,020 |
 
 ### METHOD INVOCATION
-| Library | 100,000 | 1,000,000 | 10,000,000 | 
-| --- | --- | --- | --- | 
-| TypeScriptChild | 4 | 29 | 293 | 
-| CMBrowserMonoChild | 4 | 26 | 252 | 
-| CMBrowserPolyChild | 5 | 30 | 292 | 
-| CMServerFullrefMonoChild | 4 | 24 | 233 | 
-| CMServerPartialrefMonoChild | 4 | 23 | 235 | 
-| FiberChild | 5 | 28 | 281 | 
-| JRChild | 7 | 52 | 525 | 
-| NativeChild | 3 | 24 | 252 | 
-| inherit | 5 | 33 | 337 | 
-| subclass_34rth | 5 | 32 | 323 | 
+| Library | 100,000 | 1,000,000 | 10,000,000 |
+| --- | --- | --- | --- |
+| TypeScriptChild | 4 | 29 | 290 |
+| CMBrowserMonoChild | 4 | 25 | 254 |
+| CMBrowserPolyChild | 5 | 29 | 287 |
+| CMServerFullrefMonoChild | 4 | 24 | 237 |
+| CMServerPartialrefMonoChild | 4 | 24 | 263 |
+| FiberChild | 4 | 27 | 272 |
+| DNW_FC_Child | 5 | 27 | 272 |
+| DNW_IW_Child | 5 | 27 | 269 |
+| JRChild | 7 | 50 | 504 |
+| NativeChild | 3 | 25 | 244 |
+| inherit | 5 | 34 | 334 |
+| _34rth | 5 | 36 | 340 |
 
 ### COMBINED STATISTICS
-| Library | 100,000 | 1,000,000 | 10,000,000 | 
-| --- | --- | --- | --- | 
-| TypeScriptChild | 9 | 66 | 658 | 
-| CMBrowserMonoChild | 8 | 69 | 681 | 
-| CMBrowserPolyChild | 8 | 66 | 660 | 
-| CMServerFullrefMonoChild | 8 | 68 | 671 | 
-| CMServerPartialrefMonoChild | 8 | 68 | 676 | 
-| FiberChild | 10 | 87 | 874 | 
-| JRChild | 13 | 109 | 1,094 | 
-| NativeChild | 7 | 66 | 663 | 
-| inherit | 9 | 80 | 809 | 
-| subclass_34rth | 10 | 81 | 811 | 
+| Library | 100,000 | 1,000,000 | 10,000,000 |
+| --- | --- | --- | --- |
+| TypeScriptChild | 9 | 62 | 628 |
+| CMBrowserMonoChild | 8 | 68 | 675 |
+| CMBrowserPolyChild | 8 | 65 | 647 |
+| CMServerFullrefMonoChild | 8 | 66 | 662 |
+| CMServerPartialrefMonoChild | 8 | 68 | 698 |
+| FiberChild | 10 | 82 | 814 |
+| DNW_FC_Child | 45 | 445 | 4,459 |
+| DNW_IW_Child | 46 | 438 | 4,414 |
+| JRChild | 13 | 112 | 1,135 |
+| NativeChild | 7 | 63 | 623 |
+| inherit | 10 | 88 | 887 |
+| _34rth | 8 | 69 | 680 |
+
 
 # RUN TESTS AND TEST RESULTS
 For mocha test results see [Travis CI](https://travis-ci.org/34rth/34rth-javascript-core-oo).

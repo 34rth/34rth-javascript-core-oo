@@ -71,6 +71,7 @@ earth.core.object.prototype.__id__ = 'earth.core.object';
   */
 earth.core.object.extend = function (properties, complex_member_variables) {
   if(properties instanceof Function) properties = new properties(this.prototype);
+
   var class_parent = this;
   var class_child = function(){
     if(this.__complex_member_variables__){
@@ -80,9 +81,11 @@ earth.core.object.extend = function (properties, complex_member_variables) {
       }
     }
   
-    if(this.__init) this.__init.apply(this, arguments);
-    if(this.__init_hooks.length>0) this.call_init_hooks(); 
+    this.__init.apply(this, arguments);
+    if(this.__init_hooks) this.call_init_hooks(); 
   };
+
+  if(properties.__id__ && Object.defineProperty) Object.defineProperty(class_child, "name", { value:(properties.__id__ || '').replace(/\W/g, '_')});
 
   class_child.prototype = earth.core.utils.create(class_parent.prototype);
   class_child.prototype.constructor = class_child;
@@ -96,7 +99,6 @@ earth.core.object.extend = function (properties, complex_member_variables) {
   }
 
   //init hooks definition so mixins won't propagete init hooks to parents (if this is not defined before including mixin aspects __init_hooks of parent class will be used
-  class_child.prototype.__init_hooks = [];
   // add method for calling all init hooks
   class_child.prototype.call_init_hooks = function () {
     if (this.__init_hooks_called) { return; }
@@ -204,7 +206,7 @@ earth.core.object.include = function(props){
           this.prototype.options = earth.core.utils.extend(props[prop], this.prototype.options);
           break;
         case 'constructor':
-        case '__init__':
+        case '__init':
         case '__id__'://custom ID for each class/object
           //do nothing
           break;
@@ -306,11 +308,14 @@ earth.core.utils = new (function(){
   /**
     * create an object from a given prototypv
     */
-  this.create = Object.create || (function () {
-    function F() {}
-    return function (proto) {
-      F.prototype = proto;
-      return new F();
+  this.create = (function () {
+    var object;
+    function F() {};
+    return function (prototype) {
+      F.prototype = prototype;
+      object = new F();
+      object.__proto__ = prototype;
+      return object;
     };
   })();
 
@@ -651,7 +656,6 @@ if (typeof String.prototype.startsWith != 'function') {
 earth.core.mixin = function () {};
 
 earth.core.mixin.extend = function (properties) {
-  console.log(properties);
   if(properties instanceof Function) properties = new properties(this.prototype);
   var new_object = function () {};
 

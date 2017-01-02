@@ -3522,63 +3522,68 @@ var inheritB = inherit(inheritBase, {
 
 var earth = require('./oo.js');
 var class_34rth = earth.core.object.extend(function(_super) {
-    this.__init = function(instance_string) {
-          var cachbuster1009;
-          this.counter = 0;
-          this.instance_array = [];
-          this.instance_string = instance_string;
-        };
+  this.__id__ = 'class_34rth';
+  this.instance_string = null;
+  this.counter = 0;
+  this.instance_array = [];
 
-    this.method = function(prevent_inline) {
-          var cachbuster1006;
-          if (this.counter > 99 ) this.counter = this.counter / 2;
-          else this.counter++;
-          if (prevent_inline) {
-                  var i = 0;
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                  for (i = 0; i < 1; i++) dummy.method();
-                }
-        };
-});
+  this.__init = function(instance_string) {
+    var cachbuster1009;
+    this.instance_string = instance_string;
+  };
+
+  this.method = function(prevent_inline) {
+    var cachbuster28;
+    if (this.counter > 99 ) this.counter = this.counter / 2;
+    else this.counter++;
+    if (prevent_inline) {
+      var i = 0;
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+      for (i = 0; i < 1; i++) dummy.method();
+    }
+  };
+}, false);
 
 var subclass_34rthA = class_34rth.extend(function(_super) {
-    this.__init = function(instance_string) {
-      var cachbuster1000;
-      _super.__init.call(this, instance_string);
-      this.member_a = 1;
-    };
-    this.method = function(prevent_inline) {var cachbuster1001; 
-      _super.method.call(this, false);
-      this.member_a = -this.member_a;
-    };
-});
+  this.__id__ = 'subclass_34rthA';
+  this.member_a = 1;
+  
+  this.__init = function(instance_string) {var cachbuster24;
+    _super.__init.call(this, instance_string);
+  };
+
+  this.method = function(prevent_inline) {var cachbuster25;
+    _super.method.call(this, false);
+    this.member_a = -this.member_a;
+  };
+}, false);
 
 var subclass_34rthB = class_34rth.extend(function(_super) {
-    this.__init = function(instance_string) {
-      var cachbuster1002;
-      _super.__init.call(this, instance_string);
-      this.member_b = 1;
-    };
-    this.method = function(prevent_inline) {
-      var cachbuster1003;
-      _super.method.call(this, false);
-      this.member_b = -this.member_b;
-    };
-});
+  this.__id__ = 'subclass_34rthB';
+  this.member_b = 1;
+  this.__init = function(instance_string) {var cachbuster20;
+    _super.__init.call(this, instance_string);
+  };
+  this.method = function(prevent_inline) {var cachbuster21;
+    _super.method.call(this, false);
+    this.member_b = -this.member_b;
+  };
+}, false);
 
 Number.prototype.format = function(n, x) {
       var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
       return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
-var timer = earth.core.object.extend(new function(){
+var timer = earth.core.object.extend(function(_super){
+  this.__id__ = 'timer';
   this.timers = [];
   this.last_time = null;
 
@@ -3600,7 +3605,7 @@ var timer = earth.core.object.extend(new function(){
   this.get_last_time = function(){
     return this.last_time;
   };
-});
+}, false);
 
 timer = new timer();
 
@@ -3611,12 +3616,12 @@ classes.CMBrowserPolyChild = [CMBrowserPolyChildA, CMBrowserPolyChildB, [],[]];
 classes.CMServerFullrefMonoChild = [CMServerFullrefMonoChildA, CMServerFullrefMonoChildB, [],[]];
 classes.CMServerPartialrefMonoChild = [CMServerPartialrefMonoChildA, CMServerPartialrefMonoChildB, [],[]];
 classes.FiberChild = [FiberChildA, FiberChildB, [],[]];
-//classes.DNW_FC_Child = [DNW_FC_ChildA, DNW_FC_ChildB, [],[]];
-//classes.DNW_IW_Child = [DNW_IW_ChildA, DNW_IW_ChildB, [],[]];
+classes.DNW_FC_Child = [DNW_FC_ChildA, DNW_FC_ChildB, [],[]];
+classes.DNW_IW_Child = [DNW_IW_ChildA, DNW_IW_ChildB, [],[]];
 classes.JRChild = [JRChildA, JRChildB, [],[]];
 classes.NativeChild = [NativeChildA, NativeChildB, [],[]];
 classes.inherit = [inheritA, inheritB, [],[]];
-classes.subclass_34rth = [subclass_34rthA, subclass_34rthB, [],[]];
+classes._34rth = [subclass_34rthA, subclass_34rthB, [],[]];
 
 var iterations_array = [100*1000,1000*1000, 10*1000*1000];
 var iterations = null;
@@ -3630,6 +3635,7 @@ for(i in iterations_array){
       new classes[c][1]('b');
     }
     classes[c][2].push(timer.stop());
+    
     var instance = new classes[c][0]('a');
     timer.start();
     for(var j = 0;j<iterations;j++){
@@ -3641,7 +3647,7 @@ for(i in iterations_array){
 var instantiation = '';
 var method = '';
 var iterations_string = '| Library | ';
-var separator_string = ' | --- | ';
+var separator_string = '| --- | ';
 var combined = '';
 for(i in iterations_array){
   iterations_string += iterations_array[i].format() + ' | ';
