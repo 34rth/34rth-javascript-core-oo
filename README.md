@@ -362,7 +362,7 @@ Performance comparison against the following libraries/scripts:
 * [John Resig's extend function](https://www.npmjs.com/package/class.extend)
 * Native JavaScript inheritance 
 
-Values in miliseconds are mapped against the library and the number of operations performed.
+Values in milliseconds are mapped against the library and the number of operations/cycles performed (100k, 1m, 10m). Lower values are better.
 
 ### OBJECT INSTANTIATION
 | Library | 100,000 | 1,000,000 | 10,000,000 | 
@@ -405,8 +405,6 @@ Values in miliseconds are mapped against the library and the number of operation
 | NativeChild | 7 | 66 | 663 | 
 | inherit | 9 | 80 | 809 | 
 | subclass_34rth | 10 | 81 | 811 | 
-
-(Lower values are better).
 
 # RUN TESTS AND TEST RESULTS
 For mocha test results see [Travis CI](https://travis-ci.org/34rth/34rth-javascript-core-oo).
