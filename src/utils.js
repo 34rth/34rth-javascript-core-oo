@@ -5,8 +5,6 @@ earth.core.utils = new (function(){
   this.timeouts = [];
   this.intervals = [];
 
-  this.last_id = 0;
-
   this.set_timeout = function(id, f, timeout, immediate, callback){
     if(this.timeouts[id]) clearTimeout(this.timeouts[id]);
     this.timeouts[id] = setTimeout(function(){
@@ -58,7 +56,7 @@ earth.core.utils = new (function(){
   /**
     * create an object from a given prototypv
     */
-  this.create = (function () {
+  this.create = Object.create || (function () {
     var object;
     function F() {};
     return function (prototype) {
@@ -88,14 +86,6 @@ earth.core.utils = new (function(){
     return function () {
       return fn.apply(obj, args.length ? args.concat(slice.call(arguments)) : arguments);
     };
-  };
-  /**
-    * return unique ID of an object
-    */
-  this.stamp = function (obj) {
-    // jshint camelcase: false
-    obj._earth_id = obj._earth_id || ++earth.core.utils.last_id;
-    return obj._earth_id;
   };
 
   // round a given number to a given precision

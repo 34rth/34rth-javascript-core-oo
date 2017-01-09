@@ -13,6 +13,6 @@ var class_othergrandchild = class_child.extend(function(_super){
   this.get_grandchild_number = function(){
     return this.othergrandchild_number;
   };
-});
+},true);
 
 module.exports = class_othergrandchild;

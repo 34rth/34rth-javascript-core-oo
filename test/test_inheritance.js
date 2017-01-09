@@ -80,6 +80,22 @@ describe('Inheritance', function(){
     }
   });
   
+  it('Two child instances should equal each other when from same instance, but not equal when different instances.', function(){
+    for(var i = 0;i<10;i++){
+
+      var p = new class_parent(i*2);
+      var c1 = new class_child(i, i+1);
+      var c2 = new class_child(i*2, i*3);
+
+      assert.equal(true, c1.equals(c1));
+      assert.equal(false, c1.equals(c2));
+      assert.equal(false, c1.equals(p));
+      assert.equal(false, c2.equals(p));
+      assert.equal(false, c2.equals(class_child));
+      assert.equal(false, c1.equals(class_child));
+    }
+  });
+  
   it('Parent instances should not be influenced when changing trivial and complex values.', function(){
     for(var i = 0;i<10;i++){
       var c = new class_child(i, i+1);
@@ -113,19 +129,6 @@ describe('Inheritance', function(){
       assert.equal(undefined, p.complex_object.third);
       assert.equal(undefined, c.complex_object.third);
       assert.equal('foo', g.complex_object.third);
-    }
-  });
-
-  it('Adding a static method should be available on all instances.', function(){
-    for(var i = 0;i<10;i++){
-      var c1 = new class_child(i, i+1);
-      var c2 = new class_child(i, i+1);
-      class_child.new_static_function = function(){return 2};
-      assert.equal(2, c1.constructor.new_static_function());
-      
-      var c3 = new class_child(i*2, i*3);//new child instance with parent number 1
-      assert.equal(c1.constructor.new_static_function(),c2.constructor.new_static_function());
-      assert.equal(c2.constructor.new_static_function(),c3.constructor.new_static_function());
     }
   });
   
@@ -180,10 +183,6 @@ describe('Inheritance', function(){
   });
 
   it('Should give access to static function of child', function(){
-    for(var i = 0;i<10;i++){
-      var c = new class_child(i, i+1);//new child instance with parent number 1
-      assert.equal('child static', c.constructor.child_static_function());
-    }
     assert.equal('child static', class_child.child_static_function());
   });
   

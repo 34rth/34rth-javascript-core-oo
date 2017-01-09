@@ -133,21 +133,6 @@ describe('Mixin-Inheritance', function(){
       assert.equal('bar', c.complex_object.first);
     }
   });
-
- 
-
-  it('Adding a static method should be available on all instances.', function(){
-    for(var i = 0;i<10;i++){
-      var c1 = new mixin_class_child(i, i+1);
-      var c2 = new mixin_class_child(i, i+1);
-      mixin_class_child.new_static_function = function(){return 2};
-      assert.equal(2, c1.constructor.new_static_function());
-      
-      var c3 = new mixin_class_child(i*2, i*3);//new child instance with parent number 1
-      assert.equal(c1.constructor.new_static_function(),c2.constructor.new_static_function());
-      assert.equal(c2.constructor.new_static_function(),c3.constructor.new_static_function());
-    }
-  });
   
   it('Should return values for the shadowing function', function(){
     for(var i = 0;i<10;i++){
@@ -189,10 +174,6 @@ describe('Mixin-Inheritance', function(){
   
 
   it('Should give access to static function of child', function(){
-    for(var i = 0;i<10;i++){
-      var c = new mixin_class_child(i, i+1);//new child instance with parent number 1
-      assert.equal('child static', c.constructor.child_static_function());
-    }
     assert.equal('child static', mixin_class_child.child_static_function());
   });
   

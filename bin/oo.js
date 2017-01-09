@@ -70,7 +70,7 @@ earth.core.object.prototype.__id__ = 'earth.core.object';
   *     a.options.myOption3; // 5
   */
 earth.core.object.extend = function (properties, complex_member_variables) {
-  if(properties instanceof Function) properties = new properties(this.prototype);
+  if(properties instanceof Function) properties = new properties(this);
 
   var class_parent = this;
   var class_child = function(){
@@ -80,41 +80,42 @@ earth.core.object.extend = function (properties, complex_member_variables) {
       	this[this.__complex_member_variables__[i]] =  earth.core.utils.clone(this[this.__complex_member_variables__[i]], true);
       }
     }
-  
+    
+    //earth.core.utils.stamp(this);
     this.__init.apply(this, arguments);
     if(this.__init_hooks) this.call_init_hooks(); 
   };
+  class_child.prototype = earth.core.utils.create(class_parent.prototype); 
 
   if(properties.__id__ && Object.defineProperty) Object.defineProperty(class_child, "name", { value:(properties.__id__ || '').replace(/\W/g, '_')});
 
-  class_child.prototype = earth.core.utils.create(class_parent.prototype);
-  class_child.prototype.constructor = class_child;
-  class_child.__super__ = class_parent.prototype;
-
   //inherit parent's statics
   for (var i in this) {
-    if (this.hasOwnProperty(i) && i !== 'prototype') {
+    if (this.hasOwnProperty(i) && i !== 'prototype'){ 
       class_child[i] = this[i];
     }
   }
-
+  
   //init hooks definition so mixins won't propagete init hooks to parents (if this is not defined before including mixin aspects __init_hooks of parent class will be used
   // add method for calling all init hooks
   class_child.prototype.call_init_hooks = function () {
     if (this.__init_hooks_called) { return; }
+    class_child.prototype.__init_hooks = (class_child.prototype.__init_hooks)?class_child.prototype.__init_hooks:[];
     
     if (class_parent.prototype.call_init_hooks) {
       class_parent.prototype.call_init_hooks.call(this);
     }
+
     for (var i = 0, len = class_child.prototype.__init_hooks.length; i < len; i++) {
-      class_child.prototype.__init_hooks[i].call(this);
+      class_child.prototype.__init_hooks[i].call(this, class_parent.prototype);
     }
+
     this.__init_hooks_called = true;
   };
 
   // mix static properties into the object
   if(properties.statics) {
-    earth.core.utils.extend(class_child, properties.statics);
+    class_child = earth.core.utils.extend(class_child, properties.statics);
     delete properties.statics;
   }
 
@@ -135,9 +136,22 @@ earth.core.object.extend = function (properties, complex_member_variables) {
   if(class_child.prototype.options) {
     properties.options = earth.core.utils.extend(earth.core.utils.create(class_child.prototype.options), properties.options);
   }
-  
+	
   // mix given properties into the prototype
-  earth.core.utils.extend(class_child.prototype, properties); 
+  class_child.prototype = earth.core.utils.extend(class_child.prototype, properties); 
+	/* very slow this.super implementation
+	for (var name in properties) {
+    if(typeof properties[name] === 'function'){
+      class_child.prototype[name] = (function(name, fn){
+        return function() {
+          this.super = class_parent.prototype[name];
+          return fn.apply(this, arguments);
+        };
+      })(name, properties[name]);
+		} 
+	}
+	*/
+
   //checking for complex values in prototype
   var complex_members = [];
   for(var i in class_child.prototype){
@@ -151,11 +165,11 @@ earth.core.object.extend = function (properties, complex_member_variables) {
           break;
       }
     } 
-  };
+  }
 
   if(complex_members.length > 0){
     console.info(class_child.prototype.__id__ + ': implements complex objects as a member variables (' + complex_members.join(', ') + ').');
-    if(complex_member_variables!==true){//i.e. if implementer is potentially not aware of consequences, warn with consequences
+    if(complex_member_variables===undefined){//i.e. if implementer is potentially not aware of consequences, warn with consequences
       console.warn(class_child.prototype.__id__ + ': Complex member cloning will be enforced. If you would like to avoid this behaviour, please initiate the member variable in the constructor (__init) or set complex_member_variable to false. The consequence of setting complex_members_variables to false is that complex members will be shared across all instances and modifying a complex member variable will result in the change being visible in all other instances.');
     }
     //setting the complex member variable if complex member variables have not been explicitly set to false
@@ -177,6 +191,7 @@ earth.core.object.include = function(props){
     if( 
       prop != 'extend' &&
       prop != '__super__' &&
+      prop != 'superclass' &&
       prop != 'prototype' &&
       prop != '__proto__' &&
       prop != 'add_init_hook'
@@ -230,7 +245,7 @@ earth.core.object.include = function(props){
 
 // merge new default options to the object
 earth.core.object.merge_options = function(options){
-  earth.core.utils.extend(this.prototype.options, options);
+  this.prototype.options = earth.core.utils.extend(this.prototype.options, options);
 };
 
 // add a constructor hook
@@ -246,7 +261,7 @@ earth.core.object.add_init_hook = function (fn) { // (Function) || (String, args
 };
 
 earth.core.object.prototype.equals = function(obj){
-    return (obj && this._earth_id == obj._earth_id);
+    return (obj === this);
 };
 "use strict";
 earth.core.utils = new (function(){
@@ -254,8 +269,6 @@ earth.core.utils = new (function(){
 
   this.timeouts = [];
   this.intervals = [];
-
-  this.last_id = 0;
 
   this.set_timeout = function(id, f, timeout, immediate, callback){
     if(this.timeouts[id]) clearTimeout(this.timeouts[id]);
@@ -308,7 +321,7 @@ earth.core.utils = new (function(){
   /**
     * create an object from a given prototypv
     */
-  this.create = (function () {
+  this.create = Object.create || (function () {
     var object;
     function F() {};
     return function (prototype) {
@@ -338,14 +351,6 @@ earth.core.utils = new (function(){
     return function () {
       return fn.apply(obj, args.length ? args.concat(slice.call(arguments)) : arguments);
     };
-  };
-  /**
-    * return unique ID of an object
-    */
-  this.stamp = function (obj) {
-    // jshint camelcase: false
-    obj._earth_id = obj._earth_id || ++earth.core.utils.last_id;
-    return obj._earth_id;
   };
 
   // round a given number to a given precision

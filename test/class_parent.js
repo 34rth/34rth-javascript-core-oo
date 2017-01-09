@@ -33,6 +33,6 @@ var class_parent = earth.core.object.extend(function(_super){
   this.set_complex_object_value = function(key, val){
     this.complex_object[key] = val;
   }
-});
+},true);
 
 module.exports = class_parent;

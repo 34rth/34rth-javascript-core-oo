@@ -220,6 +220,52 @@ try{
 }
 ```
 
+## Init Hooks
+Init hooks allow to trigger any number of callback functions whenever a new instance of a class is created.
+
+```javascript
+var my_class = earth.core.object.extend(function(_super){
+  this.__init = function(number){
+    console.log('Yaaay, the constructor was just called');
+    this.number = number;
+  };
+});
+
+my_class.add_init_hook(function(_super){
+  console.log('Class has been initialised with number ' + this.number);
+});
+
+new my_class(10);
+//'Yaaay, the constructor was just called
+//Class has been initialised with number 10
+```
+
+### Init Hooks and _super
+
+```javascript
+var my_class = earth.core.object.extend(function(_super){
+  this.__init = function(number){
+    console.log('Yaaay, the constructor just was called');
+    this.number = number;
+  };
+});
+
+var my_child_class = earth.core.object.extend(function(_super){
+  this.__init = function(number){
+    _super.init.call(number);
+  };
+});
+
+my_class.add_init_hook(function(_super){
+  console.log('Class has been initialised with number ' + _super.number);
+});
+
+new my_class(10);
+//'Yaaay, the constructor just was called
+//Class has been initialised with number 10
+```
+
+
 ## Mixins
 Mixins can be used to implement functionality that can be shared between classes. As a class can only inherit from one other class (JAVA-style) mixins allow a way to reduce duplication of code (think aspect oriented programming in JAVA).
 ```javascript
@@ -360,57 +406,60 @@ Performance comparison against the following libraries/scripts:
 * [TypeScript](https://www.npmjs.com/package/typescript)
 * [Fiber](https://www.npmjs.com/package/fiber)
 * [John Resig's extend function](https://www.npmjs.com/package/class.extend)
+* [Augment](https://www.npmjs.com/package/augment)
+* [jsface](https://www.npmjs.com/package/jsface)
 * Native JavaScript inheritance 
 
-Values in milliseconds are mapped against the library and the number of operations/cycles performed (100k, 1m, 10m). Lower values are better.
+To run the performance tests, run 
 
-### OBJECT INSTANTIATION
-| Library | 100,000 | 1,000,000 | 10,000,000 |
-| --- | --- | --- | --- |
-| TypeScriptChild | 14 | 96 | 967 |
-| CMBrowserMonoChild | 12 | 110 | 1,095 |
-| CMBrowserPolyChild | 11 | 100 | 1,007 |
-| CMServerFullrefMonoChild | 12 | 109 | 1,086 |
-| CMServerPartialrefMonoChild | 12 | 112 | 1,134 |
-| FiberChild | 15 | 136 | 1,357 |
-| DNW_FC_Child | 86 | 862 | 8,646 |
-| DNW_IW_Child | 88 | 849 | 8,560 |
-| JRChild | 20 | 175 | 1,766 |
-| NativeChild | 11 | 100 | 1,002 |
-| inherit | 16 | 143 | 1,439 |
-| _34rth | 12 | 102 | 1,020 |
+```
+node performance/test.js
+```
+There are two parameters available:
+* --benchmark/-b: the type of benchmark to run. Valid values: instantiation, public, static
+* --class/-c: the class that should be benchmarked.
 
-### METHOD INVOCATION
-| Library | 100,000 | 1,000,000 | 10,000,000 |
-| --- | --- | --- | --- |
-| TypeScriptChild | 4 | 29 | 290 |
-| CMBrowserMonoChild | 4 | 25 | 254 |
-| CMBrowserPolyChild | 5 | 29 | 287 |
-| CMServerFullrefMonoChild | 4 | 24 | 237 |
-| CMServerPartialrefMonoChild | 4 | 24 | 263 |
-| FiberChild | 4 | 27 | 272 |
-| DNW_FC_Child | 5 | 27 | 272 |
-| DNW_IW_Child | 5 | 27 | 269 |
-| JRChild | 7 | 50 | 504 |
-| NativeChild | 3 | 25 | 244 |
-| inherit | 5 | 34 | 334 |
-| _34rth | 5 | 36 | 340 |
+### INSTANTIATION
+| # | Library | ops/sec | Relative MoE | Min ops/sec | Max ops/sec | Sample Size |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1| augment | 16,554,667 | 0.62 | 16,452,155 | 16,657,178 | 45 |
+| 2| native | 13,977,851 | 0.60 | 13,894,656 | 14,061,046 | 47 |
+| 3| jsface | 13,230,405 | 1.08 | 13,087,322 | 13,373,488 | 91 |
+| 4| Typescript | 11,381,806 | 0.29 | 11,348,350 | 11,415,262 | 92 |
+| 5| 34rth | 10,784,427 | 1.80 | 10,589,839 | 10,979,014 | 45 |
+| 6| Lava.ClassManager polymorphic | 10,606,884 | 0.93 | 10,508,576 | 10,705,192 | 92 |
+| 7| inherits | 10,490,813 | 2.88 | 10,188,177 | 10,793,450 | 43 |
+| 8| Lava.ClassManager monomorphic | 10,224,881 | 1.59 | 10,062,467 | 10,387,296 | 47 |
+| 9| Fiber | 9,736,226 | 2.43 | 9,499,437 | 9,973,015 | 25 |
+| 10| John Resig's Class | 5,376,163 | 0.34 | 5,357,756 | 5,394,570 | 70 |
 
-### COMBINED STATISTICS
-| Library | 100,000 | 1,000,000 | 10,000,000 |
-| --- | --- | --- | --- |
-| TypeScriptChild | 9 | 62 | 628 |
-| CMBrowserMonoChild | 8 | 68 | 675 |
-| CMBrowserPolyChild | 8 | 65 | 647 |
-| CMServerFullrefMonoChild | 8 | 66 | 662 |
-| CMServerPartialrefMonoChild | 8 | 68 | 698 |
-| FiberChild | 10 | 82 | 814 |
-| DNW_FC_Child | 45 | 445 | 4,459 |
-| DNW_IW_Child | 46 | 438 | 4,414 |
-| JRChild | 13 | 112 | 1,135 |
-| NativeChild | 7 | 63 | 623 |
-| inherit | 10 | 88 | 887 |
-| _34rth | 8 | 69 | 680 |
+### PUBLIC METHOD INVOCATION
+| # | Library | ops/sec | Relative MoE | Min ops/sec | Max ops/sec | Sample Size |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1| native | 17,342,555 | 0.54 | 17,248,245 | 17,436,866 | 46 |
+| 2| Fiber | 16,988,204 | 1.39 | 16,751,649 | 17,224,759 | 20 |
+| 3| Typescript | 15,353,163 | 0.74 | 15,239,312 | 15,467,013 | 44 |
+| 4| Lava.ClassManager monomorphic | 14,648,263 | 2.72 | 14,249,923 | 15,046,602 | 15 |
+| 5| Lava.ClassManager polymorphic | 14,316,496 | 0.55 | 14,237,154 | 14,395,838 | 69 |
+| 6| augment | 13,566,051 | 0.41 | 13,510,645 | 13,621,457 | 68 |
+| 7| jsface | 13,239,465 | 1.51 | 13,038,948 | 13,439,982 | 9 |
+| 8| 34rth | 13,013,402 | 0.81 | 12,908,162 | 13,118,642 | 23 |
+| 9| inherits | 10,416,290 | 2.28 | 10,179,216 | 10,653,365 | 55 |
+| 10| John Resig's Class | 7,638,413 | 1.43 | 7,529,471 | 7,747,355 | 68 |
+
+### STATIC METHOD INVOCATION
+| # | Library | ops/sec | Relative MoE | Min ops/sec | Max ops/sec | Sample Size |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1| Typescript | 12,091,492 | 1.60 | 11,897,652 | 12,285,331 | 67 |
+| 2| jsface | 10,458,435 | 1.34 | 10,317,970 | 10,598,900 | 68 |
+| 3| inherits | 10,348,296 | 2.90 | 10,047,727 | 10,648,866 | 22 |
+| 4| 34rth | 10,224,698 | 3.30 | 9,887,248 | 10,562,148 | 18 |
+| 5| native | n\a | n\a | n\a | n\a | n\a |
+| 6| John Resig's Class | n\a | n\a | n\a | n\a | n\a |
+| 7| Fiber | n\a | n\a | n\a | n\a | n\a |
+| 8| Lava.ClassManager polymorphic | n\a | n\a | n\a | n\a | n\a |
+| 9| Lava.ClassManager monomorphic | n\a | n\a | n\a | n\a | n\a |
+| 10| augment | n\a | n\a | n\a | n\a | n\a |
 
 
 # RUN TESTS AND TEST RESULTS
