@@ -388,7 +388,7 @@ There are two parameters available:
 
 ## INSTANTIATION (INHERITANCE DEPTH 1)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
-| --- | --- | --- | --- | --- |
+| :-: | --- | --: | --: | --: |
 | 1 | augment | 20,734 | 482.31 | 10,000,000 |
 | 2 | 34rth | 20,343 | 491.58 | 10,000,000 |
 | 3 | native | 16,965 | 589.45 | 10,000,000 |
@@ -402,7 +402,7 @@ There are two parameters available:
 
 ## INSTANTIATION (INHERITANCE DEPTH 2)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
-| --- | --- | --- | --- | --- |
+| :-: | --- | --: | --: | --: |
 | 1 | 34rth | 20,392 | 490.39 | 10,000,000 |
 | 2 | augment | 17,876 | 559.42 | 10,000,000 |
 | 3 | native | 13,636 | 733.37 | 10,000,000 |
@@ -416,7 +416,7 @@ There are two parameters available:
 
 ## PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 1)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
-| --- | --- | --- | --- | --- |
+| :-: | --- | --: | --: | --: |
 | 1 | Typescript | 7,215 | 1,385.91 | 10,000,000 |
 | 2 | native | 7,049 | 1,418.74 | 10,000,000 |
 | 3 | Lava.ClassManager monomorphic | 6,959 | 1,436.98 | 10,000,000 |
@@ -430,7 +430,7 @@ There are two parameters available:
 
 ## PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 2)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
-| --- | --- | --- | --- | --- |
+| :-: | --- | --: | --: | --: |
 | 1 | Lava.ClassManager monomorphic | 6,876 | 1,454.40 | 10,000,000 |
 | 2 | Typescript | 6,325 | 1,580.93 | 10,000,000 |
 | 3 | native | 5,968 | 1,675.62 | 10,000,000 |
@@ -445,7 +445,7 @@ There are two parameters available:
 
 ## STATIC METHOD INVOCATION
 | # | Library | ops/ms | total time (in ms) | Sample Size |
-| --- | --- | --- | --- | --- |
+| :-: | --- | --: | --: | --: |
 | 1 | 34rth | 14,559 | 686.88 | 10,000,000 |
 | 2 | Typescript | 13,608 | 734.84 | 10,000,000 |
 | 3 | jsface | 12,938 | 772.92 | 10,000,000 |

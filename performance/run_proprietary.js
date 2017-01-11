@@ -99,7 +99,7 @@ for(var i in benchmarks){
   
   benchmarks[i].sort(function(a,b) {return (a.time > b.time) ? 1 : ((b.time> a.time) ? -1 : 0);} );
   console.log('| # | Library | ops/ms | total time (in ms) | Sample Size |');
-  console.log('| --- | --- | --- | --- | --- |');
+  console.log('| :-: | --- | --: | --: | --: |');
   for(var j = 0; j< benchmarks[i].length;j++){
     benchmark = benchmarks[i][j],
     name = benchmark.name,
