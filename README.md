@@ -184,10 +184,6 @@ var my_static_class = earth.core.object.extend(function(_super){
 });
 
 my_static_class.say_hello('Peter');//prints "Hello Peter"
-
-//static functions can also be called from instances (without knowing the base class) via accessing the constructor
-var instance = new my_static_class();
-instance.constructor.say_hello('Marry');//prints "Hello Marry"
 ```
 
 ## Static functions and inheritance
@@ -314,11 +310,7 @@ var speaker = earth.core.mixin.extend(function(_super){
 
 //mixins can also inherit from other mixins
 var speaker_with_good_memory = speaker.extend(function(_super){
-  this.names = null;
-
-  this.__init = function(){
-    this.names = [];
-  };
+  this.names = [];
 
   this.say_hello = function(name){
     this.names.push(name);
@@ -374,32 +366,7 @@ test.say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 
 (new app()).say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 ```
-# PERFORMANCE Tests
-## Native Tests
-Performance of 34rth-core-oo framework to native Javascript Object creation. 34rth inheritance depth of 3 has been tested for performance. See [performance.js](https://raw.githubusercontent.com/34rth/34rth-javascript-core-oo/master/performance.js) for details. 
-```
-===================== native javascript object instantiation ======================
-creating 10,000,000 objects by literals
-literal-object: **543.377ms**
-creating 10,000,000 "Object.create()"
-object: **881.320ms**
-creating 10,000,000 arrays by literals
-literal-array: **72.359ms**
-creating 10,000,000 "new Array()"
-array: **145.507ms**
-creating 10,000,000 function class instances
-literal: **1537.537ms**
-===================== 34rth framework non complex object inheritance levels ======================
-34rth framework creating 10,000,000 new class instances
-earth-complex-depth-0: **112.470ms**
-34rth framework creating 10,000,000 new subclass instances
-earth-complex-depth-1: **319.050ms**
-34rth framework creating 10,000,000 new subsubclass instances
-earth-complex-depth-2: **945.159ms**
-34rth framework creating 10,000,000 new subsubsubclass instances
-earth-complex-depth-3: **1232.001ms`**
-```
-## Performance Comparison
+# Performance Comparison
 Performance comparison against the following libraries/scripts:
 * [inherit](https://www.npmjs.com/package/inherit)
 * [Lava Class Manager](https://www.npmjs.com/package/lava-class-manager)
@@ -413,53 +380,82 @@ Performance comparison against the following libraries/scripts:
 To run the performance tests, run 
 
 ```
-node performance/test.js
+node performance/run_proprietary.js
 ```
 There are two parameters available:
 * --benchmark/-b: the type of benchmark to run. Valid values: instantiation, public, static
 * --class/-c: the class that should be benchmarked.
 
-### INSTANTIATION
-| # | Library | ops/sec | Relative MoE | Min ops/sec | Max ops/sec | Sample Size |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1| augment | 16,554,667 | 0.62 | 16,452,155 | 16,657,178 | 45 |
-| 2| native | 13,977,851 | 0.60 | 13,894,656 | 14,061,046 | 47 |
-| 3| jsface | 13,230,405 | 1.08 | 13,087,322 | 13,373,488 | 91 |
-| 4| Typescript | 11,381,806 | 0.29 | 11,348,350 | 11,415,262 | 92 |
-| 5| 34rth | 10,784,427 | 1.80 | 10,589,839 | 10,979,014 | 45 |
-| 6| Lava.ClassManager polymorphic | 10,606,884 | 0.93 | 10,508,576 | 10,705,192 | 92 |
-| 7| inherits | 10,490,813 | 2.88 | 10,188,177 | 10,793,450 | 43 |
-| 8| Lava.ClassManager monomorphic | 10,224,881 | 1.59 | 10,062,467 | 10,387,296 | 47 |
-| 9| Fiber | 9,736,226 | 2.43 | 9,499,437 | 9,973,015 | 25 |
-| 10| John Resig's Class | 5,376,163 | 0.34 | 5,357,756 | 5,394,570 | 70 |
+## INSTANTIATION (INHERITANCE DEPTH 1)
+| # | Library | ops/ms | total time (in ms) | Sample Size |
+| --- | --- | --- | --- | --- |
+| 1 | augment | 20,734 | 482.31 | 10,000,000 |
+| 2 | 34rth | 20,343 | 491.58 | 10,000,000 |
+| 3 | native | 16,965 | 589.45 | 10,000,000 |
+| 4 | jsface | 16,937 | 590.42 | 10,000,000 |
+| 5 | inherits | 13,381 | 747.34 | 10,000,000 |
+| 6 | Typescript | 13,336 | 749.87 | 10,000,000 |
+| 7 | Lava.ClassManager polymorphic | 12,748 | 784.42 | 10,000,000 |
+| 8 | Lava.ClassManager monomorphic | 12,093 | 826.93 | 10,000,000 |
+| 9 | Fiber | 11,161 | 895.98 | 10,000,000 |
+| 10 | John Resig's Class | 6,744 | 1,482.78 | 10,000,000 |
 
-### PUBLIC METHOD INVOCATION
-| # | Library | ops/sec | Relative MoE | Min ops/sec | Max ops/sec | Sample Size |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1| native | 17,342,555 | 0.54 | 17,248,245 | 17,436,866 | 46 |
-| 2| Fiber | 16,988,204 | 1.39 | 16,751,649 | 17,224,759 | 20 |
-| 3| Typescript | 15,353,163 | 0.74 | 15,239,312 | 15,467,013 | 44 |
-| 4| Lava.ClassManager monomorphic | 14,648,263 | 2.72 | 14,249,923 | 15,046,602 | 15 |
-| 5| Lava.ClassManager polymorphic | 14,316,496 | 0.55 | 14,237,154 | 14,395,838 | 69 |
-| 6| augment | 13,566,051 | 0.41 | 13,510,645 | 13,621,457 | 68 |
-| 7| jsface | 13,239,465 | 1.51 | 13,038,948 | 13,439,982 | 9 |
-| 8| 34rth | 13,013,402 | 0.81 | 12,908,162 | 13,118,642 | 23 |
-| 9| inherits | 10,416,290 | 2.28 | 10,179,216 | 10,653,365 | 55 |
-| 10| John Resig's Class | 7,638,413 | 1.43 | 7,529,471 | 7,747,355 | 68 |
+## INSTANTIATION (INHERITANCE DEPTH 2)
+| # | Library | ops/ms | total time (in ms) | Sample Size |
+| --- | --- | --- | --- | --- |
+| 1 | 34rth | 20,392 | 490.39 | 10,000,000 |
+| 2 | augment | 17,876 | 559.42 | 10,000,000 |
+| 3 | native | 13,636 | 733.37 | 10,000,000 |
+| 4 | Lava.ClassManager polymorphic | 12,426 | 804.77 | 10,000,000 |
+| 5 | jsface | 12,332 | 810.87 | 10,000,000 |
+| 6 | Lava.ClassManager monomorphic | 11,824 | 845.74 | 10,000,000 |
+| 7 | inherits | 11,194 | 893.31 | 10,000,000 |
+| 8 | Typescript | 10,630 | 940.72 | 10,000,000 |
+| 9 | Fiber | 9,210 | 1,085.78 | 10,000,000 |
+| 10 | John Resig's Class | 3,889 | 2,571.49 | 10,000,000 |
 
-### STATIC METHOD INVOCATION
-| # | Library | ops/sec | Relative MoE | Min ops/sec | Max ops/sec | Sample Size |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1| Typescript | 12,091,492 | 1.60 | 11,897,652 | 12,285,331 | 67 |
-| 2| jsface | 10,458,435 | 1.34 | 10,317,970 | 10,598,900 | 68 |
-| 3| inherits | 10,348,296 | 2.90 | 10,047,727 | 10,648,866 | 22 |
-| 4| 34rth | 10,224,698 | 3.30 | 9,887,248 | 10,562,148 | 18 |
-| 5| native | n\a | n\a | n\a | n\a | n\a |
-| 6| John Resig's Class | n\a | n\a | n\a | n\a | n\a |
-| 7| Fiber | n\a | n\a | n\a | n\a | n\a |
-| 8| Lava.ClassManager polymorphic | n\a | n\a | n\a | n\a | n\a |
-| 9| Lava.ClassManager monomorphic | n\a | n\a | n\a | n\a | n\a |
-| 10| augment | n\a | n\a | n\a | n\a | n\a |
+## PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 1)
+| # | Library | ops/ms | total time (in ms) | Sample Size |
+| --- | --- | --- | --- | --- |
+| 1 | Typescript | 7,215 | 1,385.91 | 10,000,000 |
+| 2 | native | 7,049 | 1,418.74 | 10,000,000 |
+| 3 | Lava.ClassManager monomorphic | 6,959 | 1,436.98 | 10,000,000 |
+| 4 | 34rth | 6,786 | 1,473.63 | 10,000,000 |
+| 5 | augment | 6,316 | 1,583.35 | 10,000,000 |
+| 6 | jsface | 6,088 | 1,642.56 | 10,000,000 |
+| 7 | Lava.ClassManager polymorphic | 5,530 | 1,808.43 | 10,000,000 |
+| 8 | Fiber | 5,381 | 1,858.52 | 10,000,000 |
+| 9 | inherits | 5,307 | 1,884.27 | 10,000,000 |
+| 10 | John Resig's Class | 2,581 | 3,875.01 | 10,000,000 |
+
+## PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 2)
+| # | Library | ops/ms | total time (in ms) | Sample Size |
+| --- | --- | --- | --- | --- |
+| 1 | Lava.ClassManager monomorphic | 6,876 | 1,454.40 | 10,000,000 |
+| 2 | Typescript | 6,325 | 1,580.93 | 10,000,000 |
+| 3 | native | 5,968 | 1,675.62 | 10,000,000 |
+| 4 | 34rth | 5,899 | 1,695.13 | 10,000,000 |
+| 5 | augment | 5,725 | 1,746.59 | 10,000,000 |
+| 6 | jsface | 5,204 | 1,921.58 | 10,000,000 |
+| 7 | Lava.ClassManager polymorphic | 5,126 | 1,950.87 | 10,000,000 |
+| 8 | Fiber | 4,570 | 2,188.11 | 10,000,000 |
+| 9 | inherits | 4,519 | 2,213.08 | 10,000,000 |
+| 10 | John Resig's Class | 1,900 | 5,264.32 | 10,000,000 |
+
+
+## STATIC METHOD INVOCATION
+| # | Library | ops/ms | total time (in ms) | Sample Size |
+| --- | --- | --- | --- | --- |
+| 1 | 34rth | 14,559 | 686.88 | 10,000,000 |
+| 2 | Typescript | 13,608 | 734.84 | 10,000,000 |
+| 3 | jsface | 12,938 | 772.92 | 10,000,000 |
+| 4 | inherits | 12,279 | 814.38 | 10,000,000 |
+| 5 | native | n\a | n\a | n\a |
+| 6 | John Resig's Class | n\a | n\a | n\a |
+| 7 | Fiber | n\a | n\a | n\a |
+| 8 | Lava.ClassManager polymorphic | n\a | n\a | n\a |
+| 9 | Lava.ClassManager monomorphic | n\a | n\a | n\a |
+| 10| augment | n\a | n\a | n\a |
 
 
 # RUN TESTS AND TEST RESULTS
@@ -468,4 +464,3 @@ For mocha test results see [Travis CI](https://travis-ci.org/34rth/34rth-javascr
 ```bash
 node make.js && ./node_modules/mocha/bin/mocha
 ```
-

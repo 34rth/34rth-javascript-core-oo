@@ -56,14 +56,11 @@ earth.core.utils = new (function(){
   /**
     * create an object from a given prototypv
     */
-  this.create = Object.create || (function () {
-    var object;
+  this.create = (function () {
     function F() {};
     return function (prototype) {
       F.prototype = prototype;
-      object = new F();
-      object.__proto__ = prototype;
-      return object;
+      return new F();
     };
   })();
 

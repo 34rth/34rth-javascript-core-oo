@@ -7,6 +7,6 @@ var mixin_class_parent = class_parent.extend(function(_super){
   this.__init = function(parent_number){
     class_parent.prototype.__init.call(this, parent_number);// call to parent constructor
   };
-},true);
+},{complex_member_variables:true, super:true});
 
 module.exports = mixin_class_parent;

@@ -56,11 +56,24 @@ subclass_b.prototype.method = function() {
 	base.prototype.method.call(this, false);
 };
 
+var subsubclass_b = function(instance_string) {
+	subclass_b.call(this, instance_string);
+};
+__extend(subsubclass_b, subclass_b);
+
+var subsubclass_a = function(instance_string) {
+	subclass_a.call(this, instance_string);
+};
+__extend(subsubclass_a, subclass_a);
+
+
 module.exports = {
   name:'native',
   classes:{
     base:base,
     subclass_a:subclass_a,
-    subclass_b:subclass_b
+    subclass_b:subclass_b,
+    subsubclass_a:subsubclass_a,
+    subsubclass_b:subsubclass_b
   }
 };

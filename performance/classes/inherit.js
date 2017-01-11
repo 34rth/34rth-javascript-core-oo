@@ -32,7 +32,7 @@ var base = inherit({
   }
 });
 
-var subclass_a = inherit({
+var subclass_a = inherit(base, {
   member_a:1,
   __constructor:function(instance_string){
     base.prototype.__constructor.call(this, instance_string);
@@ -47,7 +47,7 @@ var subclass_a = inherit({
   }
 });
 
-var subclass_b = inherit({
+var subclass_b = inherit(base, {
   member_b:1,
   __constructor:function(instance_string){
     base.prototype.__constructor.call(this, instance_string);
@@ -62,11 +62,25 @@ var subclass_b = inherit({
   }
 });
 
+var subsubclass_a = inherit(subclass_a, {
+  __constructor:function(instance_string){
+    subclass_a.prototype.__constructor.call(this, instance_string);
+  }
+});
+
+var subsubclass_b = inherit(subclass_b, {
+  __constructor:function(instance_string){
+    subclass_b.prototype.__constructor.call(this, instance_string);
+  }
+});
+
 module.exports = {
   name:'inherits',
   classes:{
     base:base,
     subclass_a:subclass_a,
-    subclass_b:subclass_b
+    subclass_b:subclass_b,
+    subsubclass_a:subsubclass_a,
+    subsubclass_b:subsubclass_b
   }
 };

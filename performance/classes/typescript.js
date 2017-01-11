@@ -76,11 +76,27 @@ var subclass_b = (function (_super) {
     };
     return subclass_b;
 }(base));
+var subsubclass_a = (function (_super) {
+    __extends(subsubclass_a, _super);
+    function subsubclass_a(instance_string) {
+        return _super.call(this, instance_string) || this;
+    }
+    return subsubclass_a;
+}(subclass_a));
+var subsubclass_b = (function (_super) {
+    __extends(subsubclass_b, _super);
+    function subsubclass_b(instance_string) {
+        return _super.call(this, instance_string) || this;
+    }
+    return subsubclass_b;
+}(subclass_b));
 module.exports = {
     name: 'Typescript',
     classes: {
         base: base,
         subclass_a: subclass_a,
-        subclass_b: subclass_b
+        subclass_b: subclass_b,
+        subsubclass_a: subsubclass_a,
+        subsubclass_b: subsubclass_b
     }
 };

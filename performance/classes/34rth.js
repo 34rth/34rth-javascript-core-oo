@@ -31,10 +31,11 @@ var base = earth.core.object.extend(function() {
       for (i = 0; i < 1; i++) dummy.method();
       for (i = 0; i < 1; i++) dummy.method();
     }
+    return this.instance_string;
   };
-}, false);
+},{complex_member_variables:false,no_sugar:true});
 
-var subclass_a = base.extend(function() {
+var subclass_a = base.extend(function(uber) {
   this.member_a = 1;
   
   this.statics = {};
@@ -43,16 +44,16 @@ var subclass_a = base.extend(function() {
   };
   
   this.__init = function(instance_string) {
-    base.prototype.__init.call(this, instance_string);
+    base.prototype.__init.call(this,instance_string);
   };
 
   this.method = function(prevent_inline) {
-    base.prototype.method.call(this, false);
+    base.prototype.method.call(this, prevent_inline);
     this.member_a = -this.member_a;
   };
-}, false);
+},{complex_member_variables:false,no_sugar:true});
 
-var subclass_b = base.extend(function() {
+var subclass_b = base.extend(function(uber) {
   this.member_b = 1;
   
   this.statics = {};
@@ -65,28 +66,30 @@ var subclass_b = base.extend(function() {
   };
   
   this.method = function(prevent_inline) {
-    base.prototype.method.call(this, false);
+    base.prototype.method.call(this, prevent_inline);
     this.member_b = -this.member_b;
   };
-}, false);
+},{complex_member_variables:false,no_sugar:true});
 
-var subsubclass_a = subclass_a.extend(function(){
+var subsubclass_a = subclass_a.extend(function(uber){
   this.method = function(prevent_inline) {
-    base.prototype.method.call(this, false);
+    subclass_a.prototype.method.call(this, prevent_inline);
   };
-}, false)
+},{complex_member_variables:false,no_sugar:true});
 
-var subsubclass_b = subclass_b.extend(function(){
+var subsubclass_b = subclass_b.extend(function(uber){
   this.method = function(prevent_inline) {
-    base.prototype.method.call(this, false);
+    subclass_b.prototype.method.call(this, prevent_inline);
   };
-}, false)
+},{complex_member_variables:false,no_sugar:true});
 
 module.exports = {
   name:'34rth',
   classes:{
     base:base,
     subclass_a:subclass_a,
-    subclass_b:subclass_b
+    subclass_b:subclass_b,
+    subsubclass_a:subsubclass_a,
+    subsubclass_b:subsubclass_b
   }
 };

@@ -51,13 +51,13 @@ var subclass_b = augment(base, function(uber){
 });
 
 var subsubclass_a = augment(subclass_a, function(uber){
-  this.method = function(prevent_inline) {
-    uber.method.call(this, false);
+  this.constructor = function(instance_string){
+    uber.constructor.call(this, instance_string);
   };
 });
 var subsubclass_b = augment(subclass_b, function(uber){
-  this.method = function(prevent_inline) {
-    uber.method.call(this, false);
+  this.constructor = function(instance_string){
+    uber.constructor.call(this, instance_string);
   };
 });
 
@@ -66,6 +66,8 @@ module.exports = {
   classes:{
     base:base,
     subclass_a:subclass_a,
-    subclass_b:subclass_b
+    subclass_b:subclass_b,
+    subsubclass_a:subsubclass_a,
+    subsubclass_b:subsubclass_b
   }
 };

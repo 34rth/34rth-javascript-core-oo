@@ -181,6 +181,42 @@ describe('Inheritance', function(){
       assert.equal(i/4 + 8, g.get_grandchild_number());
     }
   });
+  
+  it('Should give access to static propety of parent', function(){
+    assert.equal(5, class_parent.MY_STATIC_VARIABLE);
+  });
+  
+  it('Should give access to static propety of parent in child', function(){
+    assert.equal(5, class_child.MY_STATIC_VARIABLE);
+  });
+  
+  it('Should give access to changed static variable in parent if called from parent', function(){
+    class_parent.MY_STATIC_VARIABLE = 5;
+    class_child.MY_STATIC_VARIABLE = 5;
+    class_parent.set_my_static(7);
+    assert.equal(7, class_parent.MY_STATIC_VARIABLE);
+    assert.equal(5, class_child.MY_STATIC_VARIABLE);//child sdtatic still had not been changed
+  });
+  
+  it('Should change static variables in parent and child independently', function(){
+    class_parent.MY_STATIC_VARIABLE = 1;
+    class_child.MY_STATIC_VARIABLE = 10;
+    assert.equal(1, class_parent.MY_STATIC_VARIABLE);
+    assert.equal(10, class_child.MY_STATIC_VARIABLE);
+  });
+  
+  it('Should change static variables for class that changed the variable', function(){
+    class_parent.MY_STATIC_VARIABLE = 5;
+    class_child.MY_STATIC_VARIABLE = 5;
+    class_child.set_my_static(7);
+    assert.equal(7, class_parent.MY_STATIC_VARIABLE);
+    assert.equal(5, class_child.MY_STATIC_VARIABLE);
+  });
+  
+  it('Should give access to changed static variable in parent if called from child', function(){
+    class_parent.set_my_static(7);
+    assert.equal(7, class_parent.MY_STATIC_VARIABLE);
+  });
 
   it('Should give access to static function of child', function(){
     assert.equal('child static', class_child.child_static_function());

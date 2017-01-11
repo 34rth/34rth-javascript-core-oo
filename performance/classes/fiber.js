@@ -56,11 +56,28 @@ var subclass_b = base.extend(function(base) {
 	}
 });
 
+var subsubclass_a = subclass_a.extend(function(base) {
+  return {
+		init: function (instance_string) {
+			base.init.call(this, instance_string);
+		}
+  }
+});
+var subsubclass_b = subclass_b.extend(function(base) {
+  return {
+		init: function (instance_string) {
+			base.init.call(this, instance_string);
+		}
+  }
+});
+
 module.exports = {
   name:'Fiber',
   classes:{
     base:base,
     subclass_a:subclass_a,
-    subclass_b:subclass_b
+    subclass_b:subclass_b,
+    subsubclass_a:subsubclass_a,
+    subsubclass_b:subsubclass_b
   }
 };

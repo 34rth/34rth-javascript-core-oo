@@ -69,114 +69,132 @@ earth.core.object.prototype.__id__ = 'earth.core.object';
   *     a.options.myOption2; // 'bar'
   *     a.options.myOption3; // 5
   */
-earth.core.object.extend = function (properties, complex_member_variables) {
-  if(properties instanceof Function) properties = new properties(this);
+earth.core.object.extend = function (skeleton, options) {
+  if(skeleton instanceof Function) skeleton = new skeleton(this.prototype);
+  var options = options?options:{};
 
-  var class_parent = this;
-  var class_child = function(){
-    if(this.__complex_member_variables__){
-      var l = this.__complex_member_variables__.length;
-      for(var i = 0; i<l; i++){
-      	this[this.__complex_member_variables__[i]] =  earth.core.utils.clone(this[this.__complex_member_variables__[i]], true);
+  var base = this;
+  var derived = null;
+  
+  var derived;
+  if(options.no_sugar){
+    derived = skeleton.__init||function(){};
+  }else{
+    derived = function(){
+      if(this.__complex_member_variables__){
+        var l = this.__complex_member_variables__.length;
+        for(var i = 0; i<l; i++){
+        	this[this.__complex_member_variables__[i]] =  earth.core.utils.clone(this[this.__complex_member_variables__[i]], true);
+        }
       }
-    }
-    
-    //earth.core.utils.stamp(this);
-    this.__init.apply(this, arguments);
-    if(this.__init_hooks) this.call_init_hooks(); 
-  };
-  class_child.prototype = earth.core.utils.create(class_parent.prototype); 
+      this.__init.apply(this, arguments);
+      if(this.__init_hooks__) this.__call_init_hooks__();
+    };
+  }
+  derived.prototype = earth.core.utils.create(base.prototype); 
+  derived.prototype.__init = derived.prototype.__init || function(){};
 
-  if(properties.__id__ && Object.defineProperty) Object.defineProperty(class_child, "name", { value:(properties.__id__ || '').replace(/\W/g, '_')});
+  if(skeleton.__id__ && Object.defineProperty) Object.defineProperty(derived, "name", { value:(skeleton.__id__ || '').replace(/\W/g, '_')});
 
   //inherit parent's statics
   for (var i in this) {
     if (this.hasOwnProperty(i) && i !== 'prototype'){ 
-      class_child[i] = this[i];
+      derived[i] = this[i];
     }
   }
   
   //init hooks definition so mixins won't propagete init hooks to parents (if this is not defined before including mixin aspects __init_hooks of parent class will be used
   // add method for calling all init hooks
-  class_child.prototype.call_init_hooks = function () {
-    if (this.__init_hooks_called) { return; }
-    class_child.prototype.__init_hooks = (class_child.prototype.__init_hooks)?class_child.prototype.__init_hooks:[];
+  derived.prototype.__call_init_hooks__ = function () {
+    if (this.__init_hooks_called__) { return; }
+    derived.prototype.__init_hooks__ = (derived.prototype.__init_hooks__)?derived.prototype.__init_hooks__:[];
     
-    if (class_parent.prototype.call_init_hooks) {
-      class_parent.prototype.call_init_hooks.call(this);
+    if (base.prototype.__call_init_hooks__) {
+      base.prototype.__call_init_hooks__.call(this);
     }
 
-    for (var i = 0, len = class_child.prototype.__init_hooks.length; i < len; i++) {
-      class_child.prototype.__init_hooks[i].call(this, class_parent.prototype);
+    for (var i = 0, len = derived.prototype.__init_hooks__.length; i < len; i++) {
+      derived.prototype.__init_hooks__[i].call(this, base.prototype);
     }
 
-    this.__init_hooks_called = true;
+    this.__init_hooks_called__ = true;
   };
 
-  // mix static properties into the object
-  if(properties.statics) {
-    class_child = earth.core.utils.extend(class_child, properties.statics);
-    delete properties.statics;
+  // mix static skeleton into the object
+  if(skeleton.statics) {
+    derived = earth.core.utils.extend(derived, skeleton.statics);
+    delete skeleton.statics;
   }
 
   //mix includes into the prototype, i.e. aspects of mixins
-  if (properties.includes) {
-    if(properties.includes instanceof Array){
+  if (skeleton.includes) {
+    if(skeleton.includes instanceof Array){
       var index,len;
-      for(index = 0,len=properties.includes.length;index<len;index++){
-        class_child.include(properties.includes[index]);
+      for(index = 0,len=skeleton.includes.length;index<len;index++){
+        derived.include(skeleton.includes[index]);
       }
     }else{
-      class_child.include(properties.includes);
+      derived.include(skeleton.includes);
     }
-    delete properties.includes;
+    delete skeleton.includes;
   }
   
   // merge options
-  if(class_child.prototype.options) {
-    properties.options = earth.core.utils.extend(earth.core.utils.create(class_child.prototype.options), properties.options);
+  if(derived.prototype.options) {
+    derived.prototype.options = earth.core.utils.extend(earth.core.utils.create(derived.prototype.options), skeleton.options);
   }
 	
-  // mix given properties into the prototype
-  class_child.prototype = earth.core.utils.extend(class_child.prototype, properties); 
-	/* very slow this.super implementation
-	for (var name in properties) {
-    if(typeof properties[name] === 'function'){
-      class_child.prototype[name] = (function(name, fn){
-        return function() {
-          this.super = class_parent.prototype[name];
-          return fn.apply(this, arguments);
-        };
-      })(name, properties[name]);
-		} 
-	}
-	*/
+  // mix given skeleton into the prototype
+  derived.prototype = earth.core.utils.extend(derived.prototype, skeleton); 
+	// very slow this.super implementation
+  if(options.super){
+	  for (var name in skeleton) {
+      if(typeof skeleton[name] === 'function'){
+        if(base.prototype[name]){
+          derived.prototype[name] = (function(name, fn){
+            return function() {
+              this.super = base.prototype[name];
+              return fn.apply(this, arguments);
+            };
+          })(name, skeleton[name]);
+        }
+  		} 
+  	}
+  }
 
   //checking for complex values in prototype
   var complex_members = [];
-  for(var i in class_child.prototype){
-    if(typeof class_child.prototype[i] === 'object' && class_child.prototype[i] !== null){
-      switch(i){
-        case '__init_hooks':
+  for(var p in derived.prototype){
+    if(typeof derived.prototype[p] === 'object' && derived.prototype[p] !== null){
+      switch(p){
+        case '__init_hooks__':
         case '__complex_member_variables__':
           break;
         default:
-          complex_members.push(i);
+          complex_members.push(p);
           break;
       }
-    } 
+    }else if(typeof derived.prototype[p] === 'function'  && base.prototype[p] && derived.prototype[p] != base.prototype[p]){
+      switch(p){
+        case '__call_init_hooks__':
+          break;
+        default:
+         // derived.prototype[p].base = base.prototype[p];
+          break;
+      }
+    }
   }
 
   if(complex_members.length > 0){
-    console.info(class_child.prototype.__id__ + ': implements complex objects as a member variables (' + complex_members.join(', ') + ').');
-    if(complex_member_variables===undefined){//i.e. if implementer is potentially not aware of consequences, warn with consequences
-      console.warn(class_child.prototype.__id__ + ': Complex member cloning will be enforced. If you would like to avoid this behaviour, please initiate the member variable in the constructor (__init) or set complex_member_variable to false. The consequence of setting complex_members_variables to false is that complex members will be shared across all instances and modifying a complex member variable will result in the change being visible in all other instances.');
+    console.info(derived.prototype.__id__ + ': implements complex objects as a member variables (' + complex_members.join(', ') + ').');
+    if(options.complex_member_variables===undefined){//i.e. if implementer is potentially not aware of consequences, warn with consequences
+      console.warn(derived.prototype.__id__ + ': Complex member cloning will be enforced. If you would like to avoid this behaviour, please initiate the member variable in the constructor (__init) or set complex_member_variable to false. The consequence of setting complex_members_variables to false is that complex members will be shared across all instances and modifying a complex member variable will result in the change being visible in all other instances.');
     }
     //setting the complex member variable if complex member variables have not been explicitly set to false
-    class_child.prototype.__complex_member_variables__ = (true && (complex_member_variables!== false))?complex_members:false;
+    derived.prototype.__complex_member_variables__ = (true && (options.complex_member_variables!== false))?complex_members:false;
   }
 
-  return class_child;
+  return derived;
 };
 
 // method for adding properties to prototype
@@ -190,10 +208,8 @@ earth.core.object.include = function(props){
     //we are not overwriting the extend method as mixins have a different extend method!
     if( 
       prop != 'extend' &&
-      prop != '__super__' &&
       prop != 'superclass' &&
       prop != 'prototype' &&
-      prop != '__proto__' &&
       prop != 'add_init_hook'
     ){
       if(this[prop]){
@@ -205,14 +221,14 @@ earth.core.object.include = function(props){
   }
 
   // include prototype methods
-  var props = (props.prototype)?props.prototype:props.__proto__;
+  var props = (props.prototype)?props.prototype:function(){};
   //we wanna know what the leaf methods/properties are
   var this_props = Object.keys(this.prototype);
   //TODO: implement indexed array (k => v) to avoid naming conflicts between mixings. this way mixins can be ID'd/labeled and the respective function names prefixed
   while(props){
     for(var prop in props){
       switch(prop){
-        case '__init_hooks':
+        case '__init_hooks__':
           for(var hook in props[prop]){
             this.add_init_hook(props[prop][hook]);
           }
@@ -256,8 +272,8 @@ earth.core.object.add_init_hook = function (fn) { // (Function) || (String, args
     this[fn].apply(this, args);
   };
 
-  this.prototype.__init_hooks = this.prototype.__init_hooks || [];
-  this.prototype.__init_hooks.push(init);
+  this.prototype.__init_hooks__ = this.prototype.__init_hooks__ || [];
+  this.prototype.__init_hooks__.push(init);
 };
 
 earth.core.object.prototype.equals = function(obj){
@@ -321,14 +337,11 @@ earth.core.utils = new (function(){
   /**
     * create an object from a given prototypv
     */
-  this.create = Object.create || (function () {
-    var object;
+  this.create = (function () {
     function F() {};
     return function (prototype) {
       F.prototype = prototype;
-      object = new F();
-      object.__proto__ = prototype;
-      return object;
+      return new F();
     };
   })();
 
@@ -660,17 +673,15 @@ if (typeof String.prototype.startsWith != 'function') {
   */
 earth.core.mixin = function () {};
 
-earth.core.mixin.extend = function (properties) {
-  if(properties instanceof Function) properties = new properties(this.prototype);
+earth.core.mixin.extend = function (skeleton) {
+  if(skeleton instanceof Function) skeleton = new skeleton(this.prototype);
   var new_object = function () {};
 
 
   // jshint camelcase: false
-  var parent_proto = new_object.__super__ = this.prototype;
+  var parent_proto = this.prototype;
   var proto = earth.core.utils.create(parent_proto);
   
-  proto.__init_hooks = [];
-
   proto.constructor = new_object;
   new_object.prototype = proto;
 
@@ -680,24 +691,25 @@ earth.core.mixin.extend = function (properties) {
       new_object[i] = this[i];
     }
   }
-  // mix static properties into the object
-  if(properties.statics) {
-    earth.core.utils.extend(new_object, properties.statics);
-    delete properties.statics;
+  // mix static skeleton into the object
+  if(skeleton.statics) {
+    earth.core.utils.extend(new_object, skeleton.statics);
+    delete skeleton.statics;
   }
 
   // merge options
   if (proto.options) {
-    properties.options = earth.core.utils.extend(earth.core.utils.create(proto.options), properties.options);
+    new_object.options = earth.core.utils.extend(earth.core.utils.create(proto.options), skeleton.options);
   }
 
-  // mix given properties into the prototype
-  earth.core.utils.extend(proto, properties);
+  // mix given skeleton into the prototype
+  earth.core.utils.extend(proto, skeleton);
   return new_object;
 };
 
 earth.core.mixin.add_init_hook = function (fn) { // (Function) || (String, args...)
-  this.prototype.__init_hooks.push(fn);
+  this.prototype.__init_hooks__ = this.prototype.__init_hooks__ || [];
+  this.prototype.__init_hooks__.push(fn);
 };
 "use strict";
 

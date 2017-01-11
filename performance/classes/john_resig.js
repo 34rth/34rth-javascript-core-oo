@@ -50,11 +50,25 @@ var subclass_b = base.extend({
 	}
 });
 
+var subsubclass_a = subclass_a.extend({
+	init: function(instance_string){
+		this._super(instance_string);
+	}
+});
+
+var subsubclass_b = subclass_b.extend({
+	init: function(instance_string){
+		this._super(instance_string);
+	}
+});
+
 module.exports = {
   name:'John Resig\'s Class',
   classes:{
     base:base,
     subclass_a:subclass_a,
-    subclass_b:subclass_b
+    subclass_b:subclass_b,
+    subsubclass_a:subsubclass_a,
+    subsubclass_b:subsubclass_b
   }
 };

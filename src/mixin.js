@@ -5,17 +5,15 @@
   */
 earth.core.mixin = function () {};
 
-earth.core.mixin.extend = function (properties) {
-  if(properties instanceof Function) properties = new properties(this.prototype);
+earth.core.mixin.extend = function (skeleton) {
+  if(skeleton instanceof Function) skeleton = new skeleton(this.prototype);
   var new_object = function () {};
 
 
   // jshint camelcase: false
-  var parent_proto = new_object.__super__ = this.prototype;
+  var parent_proto = this.prototype;
   var proto = earth.core.utils.create(parent_proto);
   
-  proto.__init_hooks = [];
-
   proto.constructor = new_object;
   new_object.prototype = proto;
 
@@ -25,22 +23,23 @@ earth.core.mixin.extend = function (properties) {
       new_object[i] = this[i];
     }
   }
-  // mix static properties into the object
-  if(properties.statics) {
-    earth.core.utils.extend(new_object, properties.statics);
-    delete properties.statics;
+  // mix static skeleton into the object
+  if(skeleton.statics) {
+    earth.core.utils.extend(new_object, skeleton.statics);
+    delete skeleton.statics;
   }
 
   // merge options
   if (proto.options) {
-    properties.options = earth.core.utils.extend(earth.core.utils.create(proto.options), properties.options);
+    new_object.options = earth.core.utils.extend(earth.core.utils.create(proto.options), skeleton.options);
   }
 
-  // mix given properties into the prototype
-  earth.core.utils.extend(proto, properties);
+  // mix given skeleton into the prototype
+  earth.core.utils.extend(proto, skeleton);
   return new_object;
 };
 
 earth.core.mixin.add_init_hook = function (fn) { // (Function) || (String, args...)
-  this.prototype.__init_hooks.push(fn);
+  this.prototype.__init_hooks__ = this.prototype.__init_hooks__ || [];
+  this.prototype.__init_hooks__.push(fn);
 };

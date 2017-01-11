@@ -66,11 +66,25 @@ var subclass_b = Class(base, {
   }
 });
 
+var subsubclass_a = Class(subclass_a, {
+  constructor:function(instance_string){
+    subsubclass_a.$super.call(this, instance_string);
+  }
+})
+
+var subsubclass_b = Class(subclass_b, {
+  constructor:function(instance_string){
+    subsubclass_b.$super.call(this, instance_string);
+  }
+})
+
 module.exports = {
   name:'jsface',
   classes:{
     base:base,
     subclass_a:subclass_a,
-    subclass_b:subclass_b
+    subclass_b:subclass_b,
+    subsubclass_a:subsubclass_a,
+    subsubclass_b:subsubclass_b
   }
 };

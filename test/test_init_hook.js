@@ -38,7 +38,19 @@ describe('Init Hooks', function(){
     assert.equal(4, counter);
   });
   
-  it('Parent class init hooks should get called', function(){
+  
+  it('Init hooks of parents should get called', function(){
+    var counter = 0;
+
+    class_parent.add_init_hook(function(){
+      counter = this.child_number;
+    });
+    
+    var child = new class_child(1,2);
+    assert.equal(2, counter);
+  });
+  
+  it('Init hooks should get called up the chain', function(){
     var counter = 0;
 
     class_parent.add_init_hook(function(){
@@ -64,7 +76,7 @@ describe('Init Hooks', function(){
     assert.equal(5, counter);
   });
   
-  it('Each instance should call the init hooks in sequence', function(){
+  it('Each init hooks should have access to parent', function(){
     var counter = 0;
 
     class_child.add_init_hook(function(_super){

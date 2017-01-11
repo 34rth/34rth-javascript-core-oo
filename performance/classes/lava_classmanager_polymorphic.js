@@ -59,12 +59,31 @@ Lava.ClassManager.define(
   }
 });
 
+Lava.ClassManager.define(
+'global.subsubclass_polymorphic_a',
+{
+	Extends: 'global.subclass_polymorphic_a',
+  init:function(instance_string){
+    this.subclass_polymorphic_a$init(instance_string);
+  }
+});
+Lava.ClassManager.define(
+'global.subsubclass_polymorphic_b',
+{
+	Extends: 'global.subclass_polymorphic_b',
+  init:function(instance_string){
+    this.subclass_polymorphic_b$init(instance_string);
+  }
+});
+
 
 module.exports = {
   name:'Lava.ClassManager polymorphic',
   classes:{
     base:base_polymorphic,
     subclass_a:subclass_polymorphic_a,
-    subclass_b:subclass_polymorphic_b
+    subclass_b:subclass_polymorphic_b,
+    subsubclass_a:subsubclass_polymorphic_a,
+    subsubclass_b:subsubclass_polymorphic_b
   }
 };

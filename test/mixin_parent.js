@@ -37,7 +37,6 @@ var mixin_parent = earth.core.mixin.extend(function(_super){
     //this returns a value only defined in the class
     return this.child_number;
   };
-
-});
+},{complex_member_variables:true, super:true});
 
 module.exports = mixin_parent;

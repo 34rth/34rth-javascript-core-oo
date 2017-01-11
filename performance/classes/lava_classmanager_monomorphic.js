@@ -58,12 +58,30 @@ Lava.ClassManager.define(
   }
 });
 
+Lava.ClassManager.define(
+'global.subsubclass_monomorphic_a',
+{
+	Extends: 'global.subclass_monomorphic_a',
+  init:function(instance_string){
+    this.subclass_monomorphic_a$init(instance_string);
+  }
+});
+Lava.ClassManager.define(
+'global.subsubclass_monomorphic_b',
+{
+	Extends: 'global.subclass_monomorphic_b',
+  init:function(instance_string){
+    this.subclass_monomorphic_b$init(instance_string);
+  }
+});
 
 module.exports = {
   name:'Lava.ClassManager monomorphic',
   classes:{
     base:base_monomorphic,
     subclass_a:subclass_monomorphic_a,
-    subclass_b:subclass_monomorphic_b
+    subclass_b:subclass_monomorphic_b,
+    subsubclass_a:subsubclass_monomorphic_a,
+    subsubclass_b:subsubclass_monomorphic_b
   }
 };
