@@ -18,11 +18,11 @@
       * [Mixins and Inheritance](#mixins-and-inheritance)
       * [Mixin and chaining](#mixin-and-chaining)
    * [PERFORMANCE COMPARISON](#performance-comparison)
-      * [INSTANTIATION (INHERITANCE DEPTH 1)](#instantiation-inheritance-depth-1)
-      * [INSTANTIATION (INHERITANCE DEPTH 2)](#instantiation-inheritance-depth-2)
-      * [PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 1)](#public-method-invocation-inheritance-depth-1)
-      * [PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 2)](#public-method-invocation-inheritance-depth-2)
-      * [STATIC METHOD INVOCATION](#static-method-invocation)
+      * [Instantiation (inheritance depth 1)](#instantiation-inheritance-depth-1)
+      * [Instantiation (inheritance depth 2)](#instantiation-inheritance-depth-2)
+      * [Public Method Invocation (inheritance depth 1)](#public-method-invocation-inheritance-depth-1)
+      * [Public Method Invocation (inheritance depth 2)](#public-method-invocation-inheritance-depth-2)
+      * [Static Method Invocation](#static-method-invocation)
    * [TESTS](#run-tests-and-test-results)
 
 
