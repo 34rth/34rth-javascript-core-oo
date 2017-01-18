@@ -72,14 +72,12 @@ earth.core.object.prototype.__id__ = 'earth.core.object';
 earth.core.object.extend = function (skeleton, options) {
   if(skeleton instanceof Function) skeleton = new skeleton(this.prototype);
   var options = options?options:{};
+  options.sugar = (options.sugar!==false)?true:false;
 
   var base = this;
   var derived = null;
-  
-  var derived;
-  if(options.no_sugar){
-    derived = skeleton.__init||function(){};
-  }else{
+
+  if(options.sugar){
     derived = function(){
       if(this.__complex_member_variables__){
         var l = this.__complex_member_variables__.length;
@@ -90,6 +88,8 @@ earth.core.object.extend = function (skeleton, options) {
       this.__init.apply(this, arguments);
       if(this.__init_hooks__) this.__call_init_hooks__();
     };
+  }else{
+    derived = skeleton.__init||function(){};
   }
   derived.prototype = earth.core.utils.create(base.prototype); 
   derived.prototype.__init = derived.prototype.__init || function(){};
@@ -186,9 +186,10 @@ earth.core.object.extend = function (skeleton, options) {
   }
 
   if(complex_members.length > 0){
-    console.info(derived.prototype.__id__ + ': implements complex objects as a member variables (' + complex_members.join(', ') + ').');
+    var __id__ = derived.prototype.hasOwnProperty('__id__')?derived.prototype.__id__:('Child of ' + derived.prototype.__id__);
+    console.info(__id__ + ': implements complex objects as a member variables (' + complex_members.join(', ') + ').');
     if(options.complex_member_variables===undefined){//i.e. if implementer is potentially not aware of consequences, warn with consequences
-      console.warn(derived.prototype.__id__ + ': Complex member cloning will be enforced. If you would like to avoid this behaviour, please initiate the member variable in the constructor (__init) or set complex_member_variable to false. The consequence of setting complex_members_variables to false is that complex members will be shared across all instances and modifying a complex member variable will result in the change being visible in all other instances.');
+      console.warn(__id__ + ': Complex member cloning will be enforced. If you would like to avoid this behaviour, please initiate the member variable in the constructor (__init) or set complex_member_variable to false. The consequence of setting complex_members_variables to false is that complex members will be shared across all instances and modifying a complex member variable will result in the change being visible in all other instances.');
     }
     //setting the complex member variable if complex member variables have not been explicitly set to false
     derived.prototype.__complex_member_variables__ = (true && (options.complex_member_variables!== false))?complex_members:false;

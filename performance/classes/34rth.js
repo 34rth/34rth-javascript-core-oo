@@ -1,4 +1,5 @@
 var earth = require('../../bin/oo.js');
+var sugar = false;
 
 var base = earth.core.object.extend(function() {
   this.instance_string = null;
@@ -33,7 +34,7 @@ var base = earth.core.object.extend(function() {
     }
     return this.instance_string;
   };
-},{complex_member_variables:false,no_sugar:true});
+},{complex_member_variables:false,sugar:sugar});
 
 var subclass_a = base.extend(function(uber) {
   this.member_a = 1;
@@ -51,7 +52,7 @@ var subclass_a = base.extend(function(uber) {
     base.prototype.method.call(this, prevent_inline);
     this.member_a = -this.member_a;
   };
-},{complex_member_variables:false,no_sugar:true});
+},{complex_member_variables:false,sugar:sugar});
 
 var subclass_b = base.extend(function(uber) {
   this.member_b = 1;
@@ -69,19 +70,19 @@ var subclass_b = base.extend(function(uber) {
     base.prototype.method.call(this, prevent_inline);
     this.member_b = -this.member_b;
   };
-},{complex_member_variables:false,no_sugar:true});
+},{complex_member_variables:false,sugar:sugar});
 
 var subsubclass_a = subclass_a.extend(function(uber){
   this.method = function(prevent_inline) {
     subclass_a.prototype.method.call(this, prevent_inline);
   };
-},{complex_member_variables:false,no_sugar:true});
+},{complex_member_variables:false,sugar:sugar});
 
 var subsubclass_b = subclass_b.extend(function(uber){
   this.method = function(prevent_inline) {
     subclass_b.prototype.method.call(this, prevent_inline);
   };
-},{complex_member_variables:false,no_sugar:true});
+},{complex_member_variables:false,sugar:sugar});
 
 module.exports = {
   name:'34rth',

@@ -2,10 +2,34 @@
 [![npm](http://img.shields.io/npm/v/34rth-javascript-core-oo.svg?style=flat-square)](https://www.npmjs.org/package/34rth-javascript-core-oo)
 [![npm](https://img.shields.io/npm/l/34rth-javascript-core-oo.svg)]()
 
-# General
+# TABLE OF CONTENTS
+   * [GENERAL](#general)
+   * [INSTALLATION](#installation)
+      * [in Node.js](#in-nodejs)
+      * [in Browser](#in-browser)
+   * [EXAMPLES](#examples)
+      * [Classes](#classes)
+      * [Simple class inheritance and _super](#simple-class-inheritance-and-_super)
+      * [Static functions](#static-functions)
+      * [Static functions and inheritance](#static-functions-and-inheritance)
+      * [Init Hooks](#init-hooks)
+         * [Init Hooks and _super](#init-hooks-and-_super)
+      * [Mixins](#mixins)
+      * [Mixins and Inheritance](#mixins-and-inheritance)
+      * [Mixin and chaining](#mixin-and-chaining)
+   * [PERFORMANCE COMPARISON](#performance-comparison)
+      * [INSTANTIATION (INHERITANCE DEPTH 1)](#instantiation-inheritance-depth-1)
+      * [INSTANTIATION (INHERITANCE DEPTH 2)](#instantiation-inheritance-depth-2)
+      * [PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 1)](#public-method-invocation-inheritance-depth-1)
+      * [PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 2)](#public-method-invocation-inheritance-depth-2)
+      * [STATIC METHOD INVOCATION](#static-method-invocation)
+   * [TESTS](#run-tests-and-test-results)
+
+
+# GENERAL
 JavaScript (node.js/browser) library for inheritance and mixins in JavaScript with strong coupling of contexts. Includes private/public/static members/functions as well as mixin architecture (borrowing functionality from mixins);
 
-# Installation
+# INSTALLATION
 ## in Node.js
 ```
 npm install 34rth-javascript-core-oo
@@ -16,7 +40,7 @@ Download the [/bin/oo.js](https://raw.githubusercontent.com/34rth/34rth-javascri
 ```html
 <script type="text/javascript" src="oo.js"></script>
 ```
-# Examples 
+# EXAMPLES 
 ## Classes
 The example below shows the private, public functions/members, static functions and variables as well as the constructor.
 ```javascript
@@ -366,7 +390,7 @@ test.say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 
 (new app()).say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 ```
-# Performance Comparison
+# PERFORMANCE COMPARISON
 Performance comparison against the following libraries/scripts:
 * [inherit](https://www.npmjs.com/package/inherit)
 * [Lava Class Manager](https://www.npmjs.com/package/lava-class-manager)
@@ -458,7 +482,7 @@ There are two parameters available:
 | 10| augment | n\a | n\a | n\a |
 
 
-# RUN TESTS AND TEST RESULTS
+# TESTS
 For mocha test results see [Travis CI](https://travis-ci.org/34rth/34rth-javascript-core-oo).
 
 ```bash
