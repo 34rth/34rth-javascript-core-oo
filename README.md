@@ -410,7 +410,7 @@ There are two parameters available:
 * --benchmark/-b: the type of benchmark to run. Valid values: instantiation, public, static
 * --class/-c: the class that should be benchmarked.
 
-## INSTANTIATION (INHERITANCE DEPTH 1)
+## Instantiation (inheritance depth 1)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | augment | 20,734 | 482.31 | 10,000,000 |
@@ -424,7 +424,7 @@ There are two parameters available:
 | 9 | Fiber | 11,161 | 895.98 | 10,000,000 |
 | 10 | John Resig's Class | 6,744 | 1,482.78 | 10,000,000 |
 
-## INSTANTIATION (INHERITANCE DEPTH 2)
+## Instantiation (inheritance depth 2)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | 34rth | 20,392 | 490.39 | 10,000,000 |
@@ -438,7 +438,7 @@ There are two parameters available:
 | 9 | Fiber | 9,210 | 1,085.78 | 10,000,000 |
 | 10 | John Resig's Class | 3,889 | 2,571.49 | 10,000,000 |
 
-## PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 1)
+## Public Method Invocation (inheritance depth 1)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | Typescript | 7,215 | 1,385.91 | 10,000,000 |
@@ -452,7 +452,7 @@ There are two parameters available:
 | 9 | inherits | 5,307 | 1,884.27 | 10,000,000 |
 | 10 | John Resig's Class | 2,581 | 3,875.01 | 10,000,000 |
 
-## PUBLIC METHOD INVOCATION (INHERITANCE DEPTH 2)
+## Public Method Invocation (inheritance depth 2)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | Lava.ClassManager monomorphic | 6,876 | 1,454.40 | 10,000,000 |
@@ -467,7 +467,7 @@ There are two parameters available:
 | 10 | John Resig's Class | 1,900 | 5,264.32 | 10,000,000 |
 
 
-## STATIC METHOD INVOCATION
+## Static Method Invocation
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | 34rth | 14,559 | 686.88 | 10,000,000 |
