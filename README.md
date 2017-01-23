@@ -8,7 +8,7 @@
       * [in Node.js](#in-nodejs)
       * [in Browser](#in-browser)
    * [EXAMPLES](#examples)
-      * [Classes (private/public variables/functions)](#classes)
+      * [Classes (private/public variables/functions)](#classes-privatepublic-variablesfunctions)
       * [Simple class inheritance and _super](#simple-class-inheritance-and-_super)
       * [Static functions](#static-functions)
       * [Static functions and inheritance](#static-functions-and-inheritance)
@@ -19,12 +19,14 @@
       * [Mixin and chaining](#mixin-and-chaining)
       * [Syntactic sugar (super calls in every class)](#syntactic-sugar-super-calls-in-every-class)
    * [PERFORMANCE COMPARISON](#performance-comparison)
-      * [Instantiation (inheritance depth 1)](#instantiation-inheritance-depth-1)
-      * [Instantiation (inheritance depth 2)](#instantiation-inheritance-depth-2)
-      * [Public Method Invocation (inheritance depth 1)](#public-method-invocation-inheritance-depth-1)
-      * [Public Method Invocation (inheritance depth 2)](#public-method-invocation-inheritance-depth-2)
-      * [Static Method Invocation](#static-method-invocation)
-   * [TESTS](#run-tests-and-test-results)
+      * [Overall performance results](#overall-performance)
+      * [Specific performance per example](#specific-performance-per-example)
+         * [Instantiation (inheritance depth 1)](#instantiation-inheritance-depth-1)
+         * [Instantiation (inheritance depth 2)](#instantiation-inheritance-depth-2)
+         * [Public Method Invocation (inheritance depth 1)](#public-method-invocation-inheritance-depth-1)
+         * [Public Method Invocation (inheritance depth 2)](#public-method-invocation-inheritance-depth-2)
+         * [Static Method Invocation](#static-method-invocation)
+   * [TESTS](#tests)
 
 
 # GENERAL
@@ -540,11 +542,26 @@ There are two parameters available:
 * --benchmark/-b: the type of benchmark to run. Valid values: instantiation, public, static
 * --class/-c: the class that should be benchmarked.
 
-## Instantiation (inheritance depth 1)
+## Overall performance results
+| # | Library | ops/ms | total time (in ms) | total sample size |
+| :-: | --- | --: | --: | --: |
+| **1** | **34rth** | **13,355** | **4,151** | **40,000,000** |
+| 2 | augment | 12,663 | 4,372 | 40,000,000 |
+| 3 | native | 10,905 | 4,417 | 40,000,000 |
+| 4 | Lava.ClassManager monomorphic | 9,438 | 4,564 | 40,000,000 |
+| 5 | Typescript | 9,377 | 4,657 | 40,000,000 |
+| 6 | jsface | 10,140 | 4,965 | 40,000,000 |
+| 7 | Lava.ClassManager polymorphic | 8,958 | 5,348 | 40,000,000 |
+| 8 | inherits | 8,600 | 5,738 | 40,000,000 |
+| 9 | Fiber | 7,581 | 6,028 | 40,000,000 |
+| 10 | John Resig’s Class | 3,779 | 13,194 | 40,000,000 |
+
+## Specific performance per example 
+### Instantiation (inheritance depth 1)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | augment | 20,734 | 482.31 | 10,000,000 |
-| 2 | 34rth | 20,343 | 491.58 | 10,000,000 |
+| **2** | **34rth** | 20,343 | 491.58 | 10,000,000 |
 | 3 | native | 16,965 | 589.45 | 10,000,000 |
 | 4 | jsface | 16,937 | 590.42 | 10,000,000 |
 | 5 | inherits | 13,381 | 747.34 | 10,000,000 |
@@ -554,10 +571,10 @@ There are two parameters available:
 | 9 | Fiber | 11,161 | 895.98 | 10,000,000 |
 | 10 | John Resig's Class | 6,744 | 1,482.78 | 10,000,000 |
 
-## Instantiation (inheritance depth 2)
+### Instantiation (inheritance depth 2)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
-| 1 | 34rth | 20,392 | 490.39 | 10,000,000 |
+| **1** | **34rth** | **20,392** | **490.39** | **10,000,000** |
 | 2 | augment | 17,876 | 559.42 | 10,000,000 |
 | 3 | native | 13,636 | 733.37 | 10,000,000 |
 | 4 | Lava.ClassManager polymorphic | 12,426 | 804.77 | 10,000,000 |
@@ -568,13 +585,13 @@ There are two parameters available:
 | 9 | Fiber | 9,210 | 1,085.78 | 10,000,000 |
 | 10 | John Resig's Class | 3,889 | 2,571.49 | 10,000,000 |
 
-## Public Method Invocation (inheritance depth 1)
+### Public Method Invocation (inheritance depth 1)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | Typescript | 7,215 | 1,385.91 | 10,000,000 |
 | 2 | native | 7,049 | 1,418.74 | 10,000,000 |
 | 3 | Lava.ClassManager monomorphic | 6,959 | 1,436.98 | 10,000,000 |
-| 4 | 34rth | 6,786 | 1,473.63 | 10,000,000 |
+| 4 | **34rth** | **6,786** | **1,473.63** | **10,000,000** |
 | 5 | augment | 6,316 | 1,583.35 | 10,000,000 |
 | 6 | jsface | 6,088 | 1,642.56 | 10,000,000 |
 | 7 | Lava.ClassManager polymorphic | 5,530 | 1,808.43 | 10,000,000 |
@@ -582,13 +599,13 @@ There are two parameters available:
 | 9 | inherits | 5,307 | 1,884.27 | 10,000,000 |
 | 10 | John Resig's Class | 2,581 | 3,875.01 | 10,000,000 |
 
-## Public Method Invocation (inheritance depth 2)
+### Public Method Invocation (inheritance depth 2)
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
 | 1 | Lava.ClassManager monomorphic | 6,876 | 1,454.40 | 10,000,000 |
 | 2 | Typescript | 6,325 | 1,580.93 | 10,000,000 |
 | 3 | native | 5,968 | 1,675.62 | 10,000,000 |
-| 4 | 34rth | 5,899 | 1,695.13 | 10,000,000 |
+| 4 | **34rth** | **5,899** | **1,695.13** | **10,000,000** |
 | 5 | augment | 5,725 | 1,746.59 | 10,000,000 |
 | 6 | jsface | 5,204 | 1,921.58 | 10,000,000 |
 | 7 | Lava.ClassManager polymorphic | 5,126 | 1,950.87 | 10,000,000 |
@@ -597,10 +614,10 @@ There are two parameters available:
 | 10 | John Resig's Class | 1,900 | 5,264.32 | 10,000,000 |
 
 
-## Static Method Invocation
+### Static Method Invocation
 | # | Library | ops/ms | total time (in ms) | Sample Size |
 | :-: | --- | --: | --: | --: |
-| 1 | 34rth | 14,559 | 686.88 | 10,000,000 |
+| 1 | **34rth** | **14,559** | **686.88** | **10,000,000** |
 | 2 | Typescript | 13,608 | 734.84 | 10,000,000 |
 | 3 | jsface | 12,938 | 772.92 | 10,000,000 |
 | 4 | inherits | 12,279 | 814.38 | 10,000,000 |
