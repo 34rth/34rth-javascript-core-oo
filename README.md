@@ -30,6 +30,9 @@
 # GENERAL
 JavaScript (node.js/browser) library for inheritance and mixins in JavaScript with strong coupling of contexts. Includes private/public/static members/functions as well as mixin architecture (borrowing functionality from mixins);
 
+**The package/framework is 100% stand-alone and is not dependant on any other npm packages.** The packages listed in [node_modules](node_modules) are exclusively for the [performance comparison](#performance-comparison) modules required to compare the baseline performances.
+
+
 # INSTALLATION
 ## in Node.js
 ```
