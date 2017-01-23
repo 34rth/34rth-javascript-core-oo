@@ -114,7 +114,7 @@ earth.core.object.extend = function (skeleton, options) {
     }
 
     for (var i = 0, len = derived.prototype.__init_hooks__.length; i < len; i++) {
-      derived.prototype.__init_hooks__[i].call(this, base.prototype);
+      if(!(base.prototype.__init_hooks__ && base.prototype.__init_hooks__[i] == derived.prototype.__init_hooks__[i])) derived.prototype.__init_hooks__[i].call(this, base.prototype);
     }
 
     this.__init_hooks_called__ = true;

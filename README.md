@@ -8,7 +8,7 @@
       * [in Node.js](#in-nodejs)
       * [in Browser](#in-browser)
    * [EXAMPLES](#examples)
-      * [Classes](#classes)
+      * [Classes (private/public variables/functions)](#classes)
       * [Simple class inheritance and _super](#simple-class-inheritance-and-_super)
       * [Static functions](#static-functions)
       * [Static functions and inheritance](#static-functions-and-inheritance)
@@ -17,6 +17,7 @@
       * [Mixins](#mixins)
       * [Mixins and Inheritance](#mixins-and-inheritance)
       * [Mixin and chaining](#mixin-and-chaining)
+      * [Syntactic sugar (super calls in every class)](#syntactic-sugar-super-calls-in-every-class)
    * [PERFORMANCE COMPARISON](#performance-comparison)
       * [Instantiation (inheritance depth 1)](#instantiation-inheritance-depth-1)
       * [Instantiation (inheritance depth 2)](#instantiation-inheritance-depth-2)
@@ -41,8 +42,8 @@ Download the [/bin/oo.js](https://raw.githubusercontent.com/34rth/34rth-javascri
 <script type="text/javascript" src="oo.js"></script>
 ```
 # EXAMPLES 
-## Classes
-The example below shows the private, public functions/members, static functions and variables as well as the constructor.
+## Classes (private/public variables/functions)
+The example below shows the private, public functions/members, static functions and variables as well as the constructor. See [example file](examples/01_classes.js).
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -96,7 +97,8 @@ console.log(my_instance.private_variable);//undefined... they said they're shy :
 ```
 
 ## Simple class inheritance and _super
-Code example for simple inheritance calling _super constructor and methods.
+Code example for simple inheritance calling _super constructor and methods. See [example file](examples/02_inheritance.js).
+
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -196,6 +198,8 @@ console.log(mountain_bike_instance instanceof mountain_bike);//prints true
 ```
 
 ## Static functions
+Defining and calling static functions on classes. See [example file](examples/03_static_functions.js).
+
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -211,6 +215,8 @@ my_static_class.say_hello('Peter');//prints "Hello Peter"
 ```
 
 ## Static functions and inheritance
+Inheriting and calling inherited static functions. See [example file](examples/04_static_functions_and_inheritance.js).
+
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -241,7 +247,7 @@ try{
 ```
 
 ## Init Hooks
-Init hooks allow to trigger any number of callback functions whenever a new instance of a class is created.
+Init hooks allow to trigger any number of callback functions whenever a new instance of a class is created. Init hooks traverse the whole prototype chain (ie parent's init hooks will also get triggered). See [example file](examples/05_init_hooks.js).
 
 ```javascript
 var my_class = earth.core.object.extend(function(_super){
@@ -261,33 +267,50 @@ new my_class(10);
 ```
 
 ### Init Hooks and _super
+Init hooks also allow access to _super (always in context) so shadowed functions can be called. See [example file](examples/05_init_hooks.js).
+
 
 ```javascript
+var earth = require('34rth-javascript-core-oo');
+
 var my_class = earth.core.object.extend(function(_super){
   this.__init = function(number){
     console.log('Yaaay, the constructor just was called');
     this.number = number;
   };
-});
 
-var my_child_class = earth.core.object.extend(function(_super){
-  this.__init = function(number){
-    _super.init.call(number);
+  this.my_special_function = function(){
+    console.log('I am ' + this.number + ' times more special than anyone else!');
   };
 });
 
-my_class.add_init_hook(function(_super){
-  console.log('Class has been initialised with number ' + _super.number);
+var my_child_class = my_class.extend(function(_super){
+  this.__init = function(number){
+    _super.__init.call(this, number);
+  };
+  
+  this.my_special_function = function(){
+    console.log('Me toooooooo!');
+  };
 });
 
-new my_class(10);
-//'Yaaay, the constructor just was called
+my_child_class.add_init_hook(function(_super){
+  console.log('Class has been initialised with number ' + this.number);
+  _super.my_special_function.call(this);
+  this.my_special_function();
+});
+
+new my_child_class(10);
+//Yaaay, the constructor just was called
 //Class has been initialised with number 10
+//I am 10 times more special than anyone else!
+//Me toooooooo!
 ```
 
 
 ## Mixins
-Mixins can be used to implement functionality that can be shared between classes. As a class can only inherit from one other class (JAVA-style) mixins allow a way to reduce duplication of code (think aspect oriented programming in JAVA).
+Mixins can be used to implement functionality that can be shared between classes. As a class can only inherit from one other class (JAVA-style) mixins allow a way to reduce duplication of code (think aspect oriented programming in JAVA). See [example file](examples/06_mixin.js).
+
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -323,6 +346,8 @@ test.say_goodbye('Marry');//prints "Bye Marry"
 ```
 
 ## Mixins and Inheritance
+Mixins can also inherit functions (including full inheritance logic). See [example file](examples/07_mixin_inheritance.js).
+
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -356,6 +381,8 @@ test.say_hello('Charly');//prints "Hello Peter, Marry, Charly"
 ```
 
 ## Mixin and chaining
+Trivially, all calls can be chained if desired, by returning this. See [example file](examples/08_mixin_chaining.js).
+
 ```javascript
 var earth = require('34rth-javascript-core-oo');
 
@@ -385,11 +412,111 @@ var app = earth.core.object.extend(function(_super){
 var test = new app();
 
 test.say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
-
-//OR
-
-(new app()).say_something().say_hello('Peter').say_hello('Marry').say_hello('Charly');
 ```
+
+## Syntactic sugar (super calls in every class)
+There is an in-built option to enable syntactic *super* sugar to have direct reference to super methods throughout the private/public class functions. Please note that the *super* sugar comes at a performance penalty of roughtly 40% compared to the results in the [PERFORMANCE COMPARISON](#performance-comparison). The example below is the same as in [Simple class inheritance and _super](#simple-class-inheritance-and-_super) just with syntactic *super* sugar turned on.
+
+Enabling the *super* sugar is done by passing the option {super:true} to the class definition as per the [example file](examples/09_sugar.js) below.
+
+
+```javascript
+var earth = require('34rth-javascript-core-oo');
+
+//definition of bicycle class - extending from the core class
+var bicycle = earth.core.object.extend(function(_super){
+  this.__id__ = 'bicycle';//this is optional for debugging purposes and can be any random string
+
+  // the bicycle class has three public member variables
+  this.cadence = null;
+  this.gear = null;
+  this.speed = null;
+
+  //constructor function
+  this.__init = function(start_cadence, start_speed, start_gear){
+    this.gear = start_gear;
+    this.speed = start_speed;
+    this.cadence = start_cadence;
+  };
+
+  this.set_cadence = function(value){
+    this.cadence = value;
+  };
+
+  this.set_gear = function(value){
+    this.gear = value;
+  };
+
+  this.apply_brake = function(decrement){
+    this.speed -= decrement;
+  };
+ 
+  this.speed_up = function(increment){
+    this.speed += increment;
+  };
+
+  this.get_speed = function(){
+    return this.speed; 
+  };
+}, {super:true});
+
+//definition of mountain_bike class, inheriting from the bicycle class
+var mountain_bike = bicycle.extend(function(_super){
+  this.__id__ = 'bicycle.mountain_bike';//this is optional for debugging purposes and can be any random string
+
+  //the mountain_bike class adds one more public member variable
+  this.seat_height = null;
+
+  //constructor function
+  this.__init = function(start_height, start_cadence, start_speed, start_gear){
+    this.super(start_cadence, start_speed, start_gear);//call super prototype; EQUIVALENT TO: _super.__init.call(this, start_cadence, start_speed, start_gear);//call super prototype
+    this.seat_height = start_height;
+  };
+
+  this.set_height = function(value){
+    this.seat_height = value;
+  };
+
+	//we're shadowing the function speed_up of bicycle
+	this.speed_up = function(increment){
+		//on a mountainbike we're speeding up much faster
+		this.speed += increment*1.2;
+	};
+
+  //we're shadowing the function get_speed of bicycle
+  this.get_speed = function(){
+    //but we're calling the function of the parent 
+    return this.super();//EQUIVALENT TO: return _super.get_speed.call(this);
+  };
+}, {super:true});
+
+var bicycle_instance = new bicycle(1, 10, 1);
+var mountain_bike_instance = new mountain_bike(90, 1, 10, 1);
+
+console.log(bicycle_instance.speed);//prints 10 as speed of has not been modified
+bicycle_instance.speed_up(15);//speeding up by 15 (e.g. m/h)
+console.log(bicycle_instance.speed);//prints 25 as speed of has not been modified
+console.log(typeof bicycle_instance);//returns object
+console.log(bicycle_instance instanceof earth.core.object);//prints true
+console.log(bicycle_instance instanceof bicycle);//prints true
+console.log(bicycle_instance instanceof mountain_bike);//prints false
+try{
+	bicycle_instance.set_height(5);
+}catch(e){
+  console.log('Bicycle does not have a set_height function');
+}
+
+
+console.log(mountain_bike_instance.speed);//prints 10 as speed of has not been modified
+mountain_bike_instance.speed_up(5);//speeding up by 5 (e.g. m/h)
+console.log(mountain_bike_instance.speed);//prints 16 (10+5*1.2);
+console.log(mountain_bike_instance.get_speed() == mountain_bike_instance.speed);//returns true as shadowed function get_speed calls parent function get_speed, returning the current speed
+console.log(typeof bicycle_instance);//returns object
+console.log(mountain_bike_instance instanceof earth.core.object);//prints true
+console.log(mountain_bike_instance instanceof bicycle);//prints true
+console.log(mountain_bike_instance instanceof mountain_bike);//prints true 
+```
+
 # PERFORMANCE COMPARISON
 Performance comparison against the following libraries/scripts:
 * [inherit](https://www.npmjs.com/package/inherit)
