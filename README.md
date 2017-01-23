@@ -19,7 +19,7 @@
       * [Mixin and chaining](#mixin-and-chaining)
       * [Syntactic sugar (super calls in every class)](#syntactic-sugar-super-calls-in-every-class)
    * [PERFORMANCE COMPARISON](#performance-comparison)
-      * [Overall performance results](#overall-performance)
+      * [Overall performance results](#overall-performance-results)
       * [Specific performance per example](#specific-performance-per-example)
          * [Instantiation (inheritance depth 1)](#instantiation-inheritance-depth-1)
          * [Instantiation (inheritance depth 2)](#instantiation-inheritance-depth-2)
