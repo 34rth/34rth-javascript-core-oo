@@ -1,4 +1,4 @@
-var earth = require('../bin/oo.js');
+var earth = require('34rth-javascript-core-oo');
 
 var speaker = earth.core.mixin.extend(function(_super){
   this.say_something = function(){

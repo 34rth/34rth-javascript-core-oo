@@ -1,4 +1,4 @@
-var earth = require('../bin/oo.js');
+var earth = require('34rth-javascript-core-oo');
 
 //definition of bicycle class - extending from the core class
 var bicycle = earth.core.object.extend(function(_super){
